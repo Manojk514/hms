@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Doctor Management - ITiVAT MED</title>
+    <link rel="stylesheet" href="admin_dashboard.css" />
+
+    <style>
+      .top-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .add-btn {
+        background: #1e4fa1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .add-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .doctor-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+      }
+
+      .doctor-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+        position: relative;
+      }
+
+      .doctor-card img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 12px;
+      }
+
+      .edit-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #eef4ff;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-content input {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #cbd5f5;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .save-btn {
+        background: #16a34a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .delete-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <button
+        class="back-btn"
+        onclick="window.location.href = 'admin_dashboard.html'"
+      >
+        ← Back
+      </button>
+      <div class="brand"><h2>ITiVAT MED</h2></div>
+    </div>
+
+    <div class="content">
+      <div class="top-section">
+        <h1 class="dashboard-title">Doctors</h1>
+        <button class="add-btn" onclick="openModal()">+ Add Doctor</button>
+      </div>
+
+      <div class="doctor-grid" id="doctorContainer"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="doctorModal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add Doctor</h3>
+
+        <input id="docName" placeholder="Doctor Name" />
+        <input id="docPhone" placeholder="Phone Number" />
+        <input id="docDesignation" placeholder="Designation" />
+        <input id="docExperience" placeholder="Experience (Years)" />
+
+        <label>Upload Profile Photo</label>
+        <input type="file" id="docPhoto" />
+
+        <label>Upload Experience Certificate (PDF/DOC)</label>
+        <input type="file" id="docExperienceFile" />
+
+        <label>Upload NMC Certificate</label>
+        <input type="file" id="docNmc" />
+
+        <label>Upload PAN</label>
+        <input type="file" id="docPan" />
+
+        <label>Upload Aadhar</label>
+        <input type="file" id="docAadhar" />
+
+        <input id="docSalary" placeholder="Salary" />
+
+        <div class="modal-actions">
+          <button class="save-btn" onclick="saveDoctor()">Save</button>
+          <button
+            class="delete-btn"
+            id="deleteBtn"
+            style="display: none"
+            onclick="deleteDoctor()"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="admin_doctors.js"></script>
+  </body>
+</html>

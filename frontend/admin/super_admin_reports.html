@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reports & Analytics - ITiVAT MED Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="super_admin_dashboard.css" />
+    <link rel="stylesheet" href="super_admin_reports.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+
+      <div class="brand">
+        <h2>Reports & Analytics</h2>
+        <span class="super-admin-badge">Super Admin</span>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="menu" onclick="goToDashboard()">Dashboard</div>
+        <div class="menu" onclick="goToHospitals()">Hospital Management</div>
+        <div class="menu" onclick="goToModules()">Module Configuration</div>
+        <div class="menu" onclick="goToUserManagement()">User Management</div>
+        <div class="menu active">Reports & Analytics</div>
+        <div class="menu">Subscriptions</div>
+        <div class="menu">Platform Settings</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="view-header">
+          <h1>Reports & Analytics</h1>
+          <div class="header-actions">
+            <button class="secondary-btn" onclick="scheduleReport()">Schedule Report</button>
+            <button class="excel-btn" onclick="exportAllReports()">Export All</button>
+          </div>
+        </div>
+
+        <!-- REPORT TABS -->
+        <div class="report-tabs">
+          <button class="tab active" onclick="showRevenueReport()">Revenue by Hospital</button>
+          <button class="tab" onclick="showSubscriptionReport()">Subscription Renewals</button>
+          <button class="tab" onclick="showUsageReport()">System Usage Stats</button>
+          <button class="tab" onclick="showGrowthReport()">Platform Growth</button>
+        </div>
+
+        <!-- REVENUE REPORT -->
+        <div id="revenueReport" class="report-section active">
+          <div class="report-header">
+            <h2>Revenue by Hospital</h2>
+            <div class="report-filters">
+              <select id="revenueTimeFilter">
+                <option value="current">Current Month</option>
+                <option value="last">Last Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+              <button class="filter-btn" onclick="applyRevenueFilter()">Apply</button>
+              <button class="excel-btn" onclick="exportRevenueReport()">Export</button>
+            </div>
+          </div>
+
+          <!-- Revenue Summary Cards -->
+          <div class="revenue-summary">
+            <div class="summary-card">
+              <h4>Total Revenue</h4>
+              <h3>₹2,45,000</h3>
+              <div class="trend positive">+12.5% from last month</div>
+            </div>
+            <div class="summary-card">
+              <h4>Average per Hospital</h4>
+              <h3>₹30,625</h3>
+              <div class="trend positive">+8.3% from last month</div>
+            </div>
+            <div class="summary-card">
+              <h4>Top Performing Plan</h4>
+              <h3>Premium</h3>
+              <div class="trend neutral">60% of total revenue</div>
+            </div>
+          </div>
+
+          <!-- Revenue Table -->
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Name</th>
+                  <th>Hospital Code</th>
+                  <th>Subscription Plan</th>
+                  <th>Monthly Revenue</th>
+                  <th>YTD Revenue</th>
+                  <th>Growth</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="revenueTableBody">
+                <tr>
+                  <td>Max Healthcare</td>
+                  <td>HSP-1003</td>
+                  <td><span class="plan-badge premium">Premium</span></td>
+                  <td>₹52,000</td>
+                  <td>₹6,24,000</td>
+                  <td><span class="growth positive">+15.2%</span></td>
+                  <td><span class="status active">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Apollo Hospitals</td>
+                  <td>HSP-1001</td>
+                  <td><span class="plan-badge premium">Premium</span></td>
+                  <td>₹45,000</td>
+                  <td>₹5,40,000</td>
+                  <td><span class="growth positive">+8.7%</span></td>
+                  <td><span class="status active">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Fortis Healthcare</td>
+                  <td>HSP-1002</td>
+                  <td><span class="plan-badge standard">Standard</span></td>
+                  <td>₹38,000</td>
+                  <td>₹4,56,000</td>
+                  <td><span class="growth positive">+12.1%</span></td>
+                  <td><span class="status active">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Manipal Hospitals</td>
+                  <td>HSP-1004</td>
+                  <td><span class="plan-badge standard">Standard</span></td>
+                  <td>₹35,000</td>
+                  <td>₹4,20,000</td>
+                  <td><span class="growth negative">-2.3%</span></td>
+                  <td><span class="status active">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTION RENEWAL REPORT -->
+        <div id="subscriptionReport" class="report-section">
+          <div class="report-header">
+            <h2>Subscription Renewal Report</h2>
+            <div class="report-filters">
+              <select id="renewalTimeFilter">
+                <option value="7">Next 7 Days</option>
+                <option value="30">Next 30 Days</option>
+                <option value="90">Next 90 Days</option>
+              </select>
+              <button class="filter-btn" onclick="applyRenewalFilter()">Apply</button>
+              <button class="excel-btn" onclick="exportRenewalReport()">Export</button>
+            </div>
+          </div>
+
+          <!-- Renewal Summary -->
+          <div class="renewal-summary">
+            <div class="summary-card urgent">
+              <h4>Due This Week</h4>
+              <h3>3</h3>
+              <div class="trend urgent">Requires immediate attention</div>
+            </div>
+            <div class="summary-card warning">
+              <h4>Due This Month</h4>
+              <h3>7</h3>
+              <div class="trend warning">Follow up recommended</div>
+            </div>
+            <div class="summary-card safe">
+              <h4>Renewed Recently</h4>
+              <h3>5</h3>
+              <div class="trend safe">No action needed</div>
+            </div>
+          </div>
+
+          <!-- Renewal Table -->
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Name</th>
+                  <th>Current Plan</th>
+                  <th>Expiry Date</th>
+                  <th>Days Remaining</th>
+                  <th>Renewal Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="renewalTableBody">
+                <tr class="urgent-row">
+                  <td>City Hospital</td>
+                  <td><span class="plan-badge basic">Basic</span></td>
+                  <td>2026-02-05</td>
+                  <td><span class="days-remaining urgent">3 days</span></td>
+                  <td><span class="renewal-status overdue">Overdue</span></td>
+                  <td>
+                    <button class="action-btn urgent" onclick="contactHospital('HSP-1005')">Contact Now</button>
+                  </td>
+                </tr>
+                <tr class="warning-row">
+                  <td>Metro Medical Center</td>
+                  <td><span class="plan-badge standard">Standard</span></td>
+                  <td>2026-02-15</td>
+                  <td><span class="days-remaining warning">13 days</span></td>
+                  <td><span class="renewal-status pending">Pending</span></td>
+                  <td>
+                    <button class="action-btn warning" onclick="sendReminder('HSP-1006')">Send Reminder</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Apollo Hospitals</td>
+                  <td><span class="plan-badge premium">Premium</span></td>
+                  <td>2026-03-15</td>
+                  <td><span class="days-remaining safe">43 days</span></td>
+                  <td><span class="renewal-status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewDetails('HSP-1001')">View Details</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SYSTEM USAGE STATS -->
+        <div id="usageReport" class="report-section">
+          <div class="report-header">
+            <h2>System Usage Statistics</h2>
+            <div class="report-filters">
+              <select id="usageTimeFilter">
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+              <button class="filter-btn" onclick="applyUsageFilter()">Apply</button>
+              <button class="excel-btn" onclick="exportUsageReport()">Export</button>
+            </div>
+          </div>
+
+          <!-- Usage Overview -->
+          <div class="usage-overview">
+            <div class="usage-grid">
+              <div class="usage-card">
+                <div class="usage-icon">🏥</div>
+                <div class="usage-info">
+                  <h4>Active Hospitals</h4>
+                  <h3>8 / 12</h3>
+                  <p>67% Platform Utilization</p>
+                </div>
+              </div>
+              <div class="usage-card">
+                <div class="usage-icon">⚙️</div>
+                <div class="usage-info">
+                  <h4>Total Modules Enabled</h4>
+                  <h3>28</h3>
+                  <p>Across all hospitals</p>
+                </div>
+              </div>
+              <div class="usage-card">
+                <div class="usage-icon">👥</div>
+                <div class="usage-info">
+                  <h4>Total Users</h4>
+                  <h3>1,247</h3>
+                  <p>Active in last 30 days</p>
+                </div>
+              </div>
+              <div class="usage-card">
+                <div class="usage-icon">📊</div>
+                <div class="usage-info">
+                  <h4>Data Storage</h4>
+                  <h3>2.4 TB</h3>
+                  <p>85% of allocated space</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module Usage Breakdown -->
+          <div class="module-usage">
+            <h3>Module Usage Breakdown</h3>
+            <div class="module-stats">
+              <div class="module-stat">
+                <div class="module-name">OP Module</div>
+                <div class="usage-bar">
+                  <div class="usage-fill" style="width: 100%"></div>
+                </div>
+                <div class="usage-percent">100% (8/8 hospitals)</div>
+              </div>
+              <div class="module-stat">
+                <div class="module-name">Lab Module</div>
+                <div class="usage-bar">
+                  <div class="usage-fill" style="width: 100%"></div>
+                </div>
+                <div class="usage-percent">100% (8/8 hospitals)</div>
+              </div>
+              <div class="module-stat">
+                <div class="module-name">Billing Module</div>
+                <div class="usage-bar">
+                  <div class="usage-fill" style="width: 87.5%"></div>
+                </div>
+                <div class="usage-percent">87.5% (7/8 hospitals)</div>
+              </div>
+              <div class="module-stat">
+                <div class="module-name">Pharmacy Module</div>
+                <div class="usage-bar">
+                  <div class="usage-fill" style="width: 50%"></div>
+                </div>
+                <div class="usage-percent">50% (4/8 hospitals)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLATFORM GROWTH REPORT -->
+        <div id="growthReport" class="report-section">
+          <div class="report-header">
+            <h2>Platform Growth Analytics</h2>
+            <div class="report-filters">
+              <select id="growthTimeFilter">
+                <option value="6months">Last 6 Months</option>
+                <option value="year">Last Year</option>
+                <option value="all">All Time</option>
+              </select>
+              <button class="filter-btn" onclick="applyGrowthFilter()">Apply</button>
+              <button class="excel-btn" onclick="exportGrowthReport()">Export</button>
+            </div>
+          </div>
+
+          <!-- Growth Metrics -->
+          <div class="growth-metrics">
+            <div class="metric-card">
+              <h4>Hospital Growth Rate</h4>
+              <h3>+25%</h3>
+              <div class="metric-detail">3 new hospitals this quarter</div>
+            </div>
+            <div class="metric-card">
+              <h4>Revenue Growth</h4>
+              <h3>+18.5%</h3>
+              <div class="metric-detail">Compared to last quarter</div>
+            </div>
+            <div class="metric-card">
+              <h4>User Adoption</h4>
+              <h3>+32%</h3>
+              <div class="metric-detail">New users this month</div>
+            </div>
+          </div>
+
+          <!-- Growth Timeline -->
+          <div class="growth-timeline">
+            <h3>Platform Growth Timeline</h3>
+            <div class="timeline-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>New Hospitals</th>
+                    <th>Total Revenue</th>
+                    <th>Active Users</th>
+                    <th>Growth Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Q4 2025</td>
+                    <td>3</td>
+                    <td>₹7,35,000</td>
+                    <td>1,247</td>
+                    <td>+25%</td>
+                  </tr>
+                  <tr>
+                    <td>Q3 2025</td>
+                    <td>2</td>
+                    <td>₹5,88,000</td>
+                    <td>945</td>
+                    <td>+18%</td>
+                  </tr>
+                  <tr>
+                    <td>Q2 2025</td>
+                    <td>4</td>
+                    <td>₹4,98,000</td>
+                    <td>801</td>
+                    <td>+35%</td>
+                  </tr>
+                  <tr>
+                    <td>Q1 2025</td>
+                    <td>3</td>
+                    <td>₹3,69,000</td>
+                    <td>592</td>
+                    <td>+22%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="super_admin_reports.js"></script>
+  </body>
+</html>

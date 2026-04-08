@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - ITiVAT MED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="admin_dashboard.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+
+      <div class="brand">
+        <h2>ITiVAT MED</h2>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="menu active">Overview</div>
+        <div class="menu" onclick="goAppointments()">Appointments</div>
+        <div class="menu">Lab Tests</div>
+        <div class="menu">Patients & Reports</div>
+        <div class="menu">Add Doctor</div>
+        <div class="menu">Add Staff</div>
+        <div class="menu">Finances</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <h1 class="dashboard-title">Today’s Dashboard Overview</h1>
+
+        <!-- STATS -->
+        <div class="stats">
+          <div class="card">
+            <h4>Today's Appointments</h4>
+            <h3 id="todayAppointments">0</h3>
+          </div>
+
+          <div class="card">
+            <h4>Today's Lab Tests</h4>
+            <h3 id="todayLabs">0</h3>
+          </div>
+
+          <div class="card">
+            <h4>Today's Revenue</h4>
+            <h3 id="todayRevenue">₹0</h3>
+            <div class="sub-text">
+              OP: ₹<span id="todayOpRevenue">0</span><br />
+              Labs: ₹<span id="todayLabRevenue">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="top-controls">
+          <input id="searchInput" placeholder="Search OP / Phone / Name" />
+          <button class="excel-btn" onclick="downloadExcel()">Excel</button>
+
+          <div class="tabs">
+            <button class="tab active" onclick="showAppointments()">
+              Appointments
+            </button>
+            <button class="tab" onclick="showLabs()">Labs</button>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>OP No</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Payment</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentsTableBody"></tbody>
+          </table>
+
+          <table id="labsSection" style="display: none">
+            <tbody id="labsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+
+    <!-- JS (MODULE – MUST BE AT BOTTOM) -->
+    <script type="module" src="admin_dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Care Medical Hospital | Patient Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="patient_portal.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <!-- ✅ LOGO ADDED -->
+      <img
+        src="itivat_logo.jpg"
+        alt="ITiVAT MED Logo"
+        style="height: 60px; margin-bottom: 10px"
+      />
+
+      <h1>ITIVAT MED</h1>
+      <p>Excellence in Healthcare</p>
+    </header>
+
+    <!-- MAIN -->
+    <section class="main-container">
+      <!-- LEFT : SPECIALITIES -->
+      <div class="specialities">
+        <h2>Our Specialities</h2>
+
+        <div class="speciality-list">
+          <div class="spec-card">Ophthalmology – Eye care & surgery</div>
+          <div class="spec-card">Cardiology – Heart care</div>
+          <div class="spec-card">Neurology – Brain & nerves</div>
+          <div class="spec-card">Orthopedics – Bone & joints</div>
+          <div class="spec-card">Dermatology – Skin care</div>
+          <div class="spec-card">Pediatrics – Child care</div>
+          <div class="spec-card">Gynecology – Women’s health</div>
+          <div class="spec-card">ENT – Ear, Nose & Throat</div>
+        </div>
+      </div>
+
+      <!-- RIGHT : LOGIN -->
+      <div class="login-container">
+        <h2>Patient Login</h2>
+
+        <label>Patient Id</label>
+        <input type="text" id="patientId" placeholder="Enter your Patient Id" />
+
+        <label>Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+        />
+
+        <button id="loginBtn">Login</button>
+
+        <a class="link" href="#">Forgot Password?</a>
+
+        <hr />
+
+        <p class="new">New Patient?</p>
+        <button id="registerBtn" type="button">Register</button>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+      <div>
+        <h3>2000+</h3>
+        <p>Patients Served</p>
+      </div>
+      <div>
+        <h3>500+</h3>
+        <p>Doctors</p>
+      </div>
+      <div>
+        <h3>24/7</h3>
+        <p>Support</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>
+        <strong>Contact Us</strong>
+        <p>📞 +91 1800-123-4567</p>
+        <p>📍 Hyderabad</p>
+      </div>
+
+      <div>
+        <strong>Support</strong>
+        <p>Emergency: 102</p>
+        <p>Ambulance: 108</p>
+      </div>
+
+      <div>
+        <strong>ITiVAT MED</strong>
+        <p>Trusted healthcare with compassion.</p>
+      </div>
+    </footer>
+
+    <script src="patient_portal.js"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Appointments Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="admin_appointments.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button onclick="history.back()">← Back</button>
+      <h1>ITiVAT MED</h1>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <input type="date" id="fromDate" />
+      <input type="date" id="toDate" />
+      <select id="doctorFilter"></select>
+      <button onclick="applyFilters()">Apply</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="card">
+        <p>Total Appointments</p>
+        <h2 id="totalAppointments">0</h2>
+      </div>
+      <div class="card">
+        <p>Total Labs</p>
+        <h2 id="totalLabs">0</h2>
+      </div>
+      <div class="card">
+        <p>Total Patients</p>
+        <h2 id="totalPatients">0</h2>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Appointments Distribution</h3>
+        <canvas id="pieChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-header">
+          <h3>Doctor Workload</h3>
+          <button onclick="openDoctorModal()">View More</button>
+        </div>
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <!-- TABLE CONTROLS -->
+    <div class="table-controls">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('appointments')">
+          Appointments
+        </button>
+        <button class="tab" onclick="switchTab('labs')">Labs</button>
+      </div>
+
+      <input
+        id="searchInput"
+        placeholder="Search OP / Phone / Name"
+        oninput="applySearch()"
+      />
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Doctor</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+
+      <div class="pagination">
+        <button onclick="prevPage()">Prev</button>
+        <span id="pageInfo"></span>
+        <button onclick="nextPage()">Next</button>
+      </div>
+    </div>
+
+    <!-- DOCTOR MODAL -->
+    <div class="modal" id="doctorModal">
+      <div class="modal-content">
+        <h3>Doctor-wise Summary</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Doctor</th>
+              <th>Appointments</th>
+              <th>Labs</th>
+            </tr>
+          </thead>
+          <tbody id="doctorTable"></tbody>
+        </table>
+
+        <button class="close-btn" onclick="closeDoctorModal()">Close</button>
+      </div>
+    </div>
+
+    <script type="module" src="admin_appointments.js"></script>
+  </body>
+</html>

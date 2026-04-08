@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Doctor Profile API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #1e4fa1;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #163d82;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #1e4fa1;
+        }
+        .error {
+            border-left-color: #dc2626;
+            background: #fee;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .profile-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-top: 15px;
+        }
+        .profile-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+        .profile-label {
+            font-weight: bold;
+            width: 180px;
+            color: #555;
+        }
+        .profile-value {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🩺 Test Doctor Profile API</h1>
+        
+        <div class="input-group">
+            <label for="doctorCode">Doctor Code:</label>
+            <input type="text" id="doctorCode" placeholder="Enter doctor code (e.g., DOC001)" value="DOC001">
+        </div>
+        
+        <button onclick="fetchDoctorProfile()">Fetch Profile</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function fetchDoctorProfile() {
+            const doctorCode = document.getElementById('doctorCode').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!doctorCode) {
+                resultDiv.innerHTML = '<div class="result error"><strong>Error:</strong> Please enter a doctor code</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result">Loading...</div>';
+            
+            try {
+                const response = await fetch(`get_profile.php?doctor_code=${encodeURIComponent(doctorCode)}`);
+                const data = await response.json();
+                
+                console.log('API Response:', data);
+                
+                if (data.success) {
+                    const doctor = data.data;
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <h3>✅ Doctor Profile Found</h3>
+                            <div class="profile-card">
+                                <div class="profile-row">
+                                    <div class="profile-label">ID:</div>
+                                    <div class="profile-value">${doctor.id}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Doctor Code:</div>
+                                    <div class="profile-value">${doctor.doctor_code}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Name:</div>
+                                    <div class="profile-value">${doctor.doctor_name}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Specialization ID:</div>
+                                    <div class="profile-value">${doctor.specialization_id}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Qualification:</div>
+                                    <div class="profile-value">${doctor.qualification}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Experience:</div>
+                                    <div class="profile-value">${doctor.experience} years</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">License Number:</div>
+                                    <div class="profile-value">${doctor.license_number}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Email:</div>
+                                    <div class="profile-value">${doctor.email}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Phone:</div>
+                                    <div class="profile-value">${doctor.phone}</div>
+                                </div>
+                                <div class="profile-row">
+                                    <div class="profile-label">Address:</div>
+                                    <div class="profile-value">${doctor.address}</div>
+                                </div>
+                            </div>
+                            
+                            <h4>Raw JSON Response:</h4>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Error</h3>
+                            <p><strong>Code:</strong> ${data.error.code}</p>
+                            <p><strong>Message:</strong> ${data.error.message}</p>
+                            <h4>Raw JSON Response:</h4>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Network Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('doctorCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fetchDoctorProfile();
+            }
+        });
+    </script>
+</body>
+</html>

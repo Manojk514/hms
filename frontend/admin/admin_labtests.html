@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lab Tests - ITiVAT MED</title>
+    <link rel="stylesheet" href="admin_dashboard.css" />
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <button
+        class="back-btn"
+        onclick="window.location.href = 'admin_dashboard.html'"
+      >
+        ← Back
+      </button>
+      <div class="brand"><h2>ITiVAT MED</h2></div>
+    </div>
+
+    <div class="content">
+      <h1 class="dashboard-title">Lab Test Analytics</h1>
+
+      <div class="stats">
+        <div class="card">
+          <h4>Total Tests Done</h4>
+          <h3 id="totalTests">0</h3>
+        </div>
+
+        <div class="card">
+          <h4>Most Used Test</h4>
+          <h3 id="mostUsedTest">-</h3>
+        </div>
+
+        <div class="card">
+          <h4>Different Test Types</h4>
+          <h3 id="uniqueTests">0</h3>
+        </div>
+      </div>
+
+      <div class="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th>Test Name</th>
+              <th>No of Times Done</th>
+            </tr>
+          </thead>
+          <tbody id="analyticsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script type="module" src="admin_lab_tests.js"></script>
+  </body>
+</html>

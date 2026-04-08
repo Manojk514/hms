@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Super Admin Dashboard - ITiVAT MED Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="super_admin_dashboard.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+
+      <div class="brand">
+        <h2>ITiVAT MED Platform</h2>
+        <span class="super-admin-badge">Super Admin</span>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="menu active" onclick="showDashboard()">Dashboard</div>
+        <div class="menu" onclick="showHospitals()">Hospital Management</div>
+        <div class="menu" onclick="showModuleConfig()">Module Configuration</div>
+        <div class="menu" onclick="showUserManagement()">User Management</div>
+        <div class="menu" onclick="showReports()">Reports & Analytics</div>
+        <div class="menu" onclick="showSubscriptions()">Subscriptions</div>
+        <div class="menu" onclick="showSettings()">Platform Settings</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView" class="view active">
+          <h1 class="dashboard-title">Platform Overview</h1>
+
+          <!-- STATS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Hospitals</h4>
+              <h3 id="totalHospitals">12</h3>
+              <div class="sub-text">8 Active • 4 Inactive</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Hospitals</h4>
+              <h3 id="activeHospitals">8</h3>
+              <div class="sub-text">67% Platform Usage</div>
+            </div>
+
+            <div class="card">
+              <h4>Monthly Revenue</h4>
+              <h3 id="monthlyRevenue">₹2,45,000</h3>
+              <div class="sub-text">
+                Premium: ₹1,80,000<br />
+                Standard: ₹65,000
+              </div>
+            </div>
+
+            <div class="card">
+              <h4>Expiring Soon</h4>
+              <h3 id="expiringSoon">3</h3>
+              <div class="sub-text">Subscriptions in 7 days</div>
+            </div>
+          </div>
+
+          <!-- HOSPITAL STATS TABLE -->
+          <div class="section-header">
+            <h2>Hospital-wise Statistics</h2>
+            <button class="excel-btn" onclick="downloadHospitalStats()">Export Excel</button>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Code</th>
+                  <th>Hospital Name</th>
+                  <th>Location</th>
+                  <th>Enabled Modules</th>
+                  <th>Monthly Revenue</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitalStatsBody">
+                <tr>
+                  <td>HSP-1001</td>
+                  <td>Apollo Hospitals</td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <div class="module-badges">
+                      <span class="badge">OP</span>
+                      <span class="badge">Lab</span>
+                      <span class="badge">Pharmacy</span>
+                      <span class="badge">Billing</span>
+                    </div>
+                  </td>
+                  <td>₹45,000</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewHospital('HSP-1001')">View</button>
+                    <button class="action-btn edit" onclick="editHospital('HSP-1001')">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>HSP-1002</td>
+                  <td>Fortis Healthcare</td>
+                  <td>Mumbai</td>
+                  <td>
+                    <div class="module-badges">
+                      <span class="badge">OP</span>
+                      <span class="badge">Lab</span>
+                      <span class="badge">Billing</span>
+                    </div>
+                  </td>
+                  <td>₹38,000</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewHospital('HSP-1002')">View</button>
+                    <button class="action-btn edit" onclick="editHospital('HSP-1002')">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RECENT ACTIVITIES -->
+          <div class="section-header">
+            <h2>Recent Activities</h2>
+          </div>
+
+          <div class="activities-box">
+            <div class="activity-item">
+              <div class="activity-icon create">+</div>
+              <div class="activity-content">
+                <h4>New Hospital Added</h4>
+                <p>Max Healthcare - Delhi was added to the platform</p>
+                <span class="activity-time">2 hours ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon upgrade">↗</div>
+              <div class="activity-content">
+                <h4>Plan Upgraded</h4>
+                <p>Apollo Hospitals upgraded to Premium plan</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon renew">⟳</div>
+              <div class="activity-content">
+                <h4>Subscription Renewed</h4>
+                <p>Fortis Healthcare renewed for 12 months</p>
+                <span class="activity-time">2 days ago</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TODAY'S APPOINTMENTS SECTION -->
+          <div class="section-header">
+            <h2>Today's Appointments</h2>
+            <div class="appointment-summary">
+              <span class="appointment-count">Total: <strong id="todayAppointmentCount">0</strong></span>
+              <button class="excel-btn" onclick="exportTodayAppointments()">Export Today's Data</button>
+            </div>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Patient Name</th>
+                  <th>Phone</th>
+                  <th>Doctor</th>
+                  <th>Hospital</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="todayAppointmentsBody">
+                <!-- Dynamic content will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- HOSPITAL MANAGEMENT VIEW -->
+        <div id="hospitalView" class="view">
+          <div class="view-header">
+            <h1>Hospital Management</h1>
+            <button class="primary-btn" onclick="showCreateHospital()">+ Add New Hospital</button>
+          </div>
+
+          <!-- FILTERS -->
+          <div class="filters">
+            <input type="text" id="hospitalSearch" placeholder="Search by Hospital Name or Code" />
+            <select id="statusFilter">
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            <select id="planFilter">
+              <option value="all">All Plans</option>
+              <option value="basic">Basic</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+            </select>
+            <button class="filter-btn" onclick="applyHospitalFilters()">Apply Filters</button>
+          </div>
+
+          <!-- HOSPITALS TABLE -->
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Code</th>
+                  <th>Hospital Name</th>
+                  <th>City</th>
+                  <th>Subscription Plan</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitalsTableBody">
+                <!-- Dynamic content will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="hospitalPagination">
+            <button onclick="prevHospitalPage()">Prev</button>
+            <span id="hospitalPageInfo">Page 1 of 3</span>
+            <button onclick="nextHospitalPage()">Next</button>
+          </div>
+        </div>
+
+        <!-- USER MANAGEMENT VIEW -->
+        <div id="userManagementView" class="view">
+          <div class="view-header">
+            <h1>User Management</h1>
+            <button class="primary-btn" onclick="showAddUser()">+ Add New User</button>
+          </div>
+
+          <!-- USER ROLE STATISTICS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Users</h4>
+              <h3 id="totalUsers">247</h3>
+              <div class="sub-text">Across all hospitals</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Users</h4>
+              <h3 id="activeUsers">231</h3>
+              <div class="sub-text">94% Active Rate</div>
+            </div>
+
+            <div class="card">
+              <h4>New This Month</h4>
+              <h3 id="newUsers">18</h3>
+              <div class="sub-text">+12% growth</div>
+            </div>
+
+            <div class="card">
+              <h4>Pending Approvals</h4>
+              <h3 id="pendingUsers">5</h3>
+              <div class="sub-text">Require approval</div>
+            </div>
+          </div>
+
+          <!-- USER ROLES OVERVIEW -->
+          <div class="section-header">
+            <h2>User Roles Overview</h2>
+            <button class="excel-btn" onclick="exportUserData()">Export Users</button>
+          </div>
+
+          <div class="user-roles-grid">
+            <div class="role-card">
+              <div class="role-icon front-desk">👥</div>
+              <div class="role-info">
+                <h4>Front Desk / OP Staff</h4>
+                <div class="role-count">42 Users</div>
+                <div class="role-description">Patient registration, appointment scheduling, reception</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('front-desk')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon doctor">👨‍⚕️</div>
+              <div class="role-info">
+                <h4>Doctors</h4>
+                <div class="role-count">38 Users</div>
+                <div class="role-description">Patient consultation, diagnosis, treatment planning</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('doctor')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon nurse">👩‍⚕️</div>
+              <div class="role-info">
+                <h4>Nurses</h4>
+                <div class="role-count">67 Users</div>
+                <div class="role-description">Patient care, medication administration, monitoring</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('nurse')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon lab-tech">🔬</div>
+              <div class="role-info">
+                <h4>Lab Technicians</h4>
+                <div class="role-count">24 Users</div>
+                <div class="role-description">Sample collection, testing, result entry</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('lab-tech')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon pharmacist">💊</div>
+              <div class="role-info">
+                <h4>Pharmacists</h4>
+                <div class="role-count">19 Users</div>
+                <div class="role-description">Medication dispensing, inventory management</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('pharmacist')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon billing">💰</div>
+              <div class="role-info">
+                <h4>Billing Staff</h4>
+                <div class="role-count">15 Users</div>
+                <div class="role-description">Invoice generation, payment processing, insurance</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('billing')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon patient">🏥</div>
+              <div class="role-info">
+                <h4>Patients</h4>
+                <div class="role-count">1,247 Users</div>
+                <div class="role-description">Patient portal access, appointments, records</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('patient')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon admin">⚙️</div>
+              <div class="role-info">
+                <h4>Hospital Admins</h4>
+                <div class="role-count">8 Users</div>
+                <div class="role-description">Hospital management, staff oversight, reporting</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('admin')">Manage</button>
+            </div>
+          </div>
+
+          <!-- RECENT USER ACTIVITIES -->
+          <div class="section-header">
+            <h2>Recent User Activities</h2>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Hospital</th>
+                  <th>Action</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="userActivitiesBody">
+                <tr>
+                  <td><strong>Dr. Rajesh Sharma</strong><br><small>rajesh.sharma@apollo.com</small></td>
+                  <td><span class="role-badge doctor">Doctor</span></td>
+                  <td>Apollo Hospitals</td>
+                  <td>Logged in</td>
+                  <td>2 minutes ago</td>
+                  <td><span class="status active">Online</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Nurse Priya Singh</strong><br><small>priya.singh@fortis.com</small></td>
+                  <td><span class="role-badge nurse">Nurse</span></td>
+                  <td>Fortis Healthcare</td>
+                  <td>Updated patient record</td>
+                  <td>5 minutes ago</td>
+                  <td><span class="status active">Online</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Lab Tech Amit Kumar</strong><br><small>amit.kumar@max.com</small></td>
+                  <td><span class="role-badge lab-tech">Lab Tech</span></td>
+                  <td>Max Healthcare</td>
+                  <td>Submitted test results</td>
+                  <td>8 minutes ago</td>
+                  <td><span class="status active">Online</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTIONS MANAGEMENT VIEW -->
+        <div id="subscriptionsView" class="view">
+          <div class="view-header">
+            <h1>Subscriptions Management</h1>
+            <div class="header-actions">
+              <button class="secondary-btn" onclick="bulkRenewal()">Bulk Renewal</button>
+              <button class="excel-btn" onclick="exportSubscriptions()">Export All</button>
+            </div>
+          </div>
+
+          <!-- SUBSCRIPTION STATISTICS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Subscriptions</h4>
+              <h3 id="totalSubscriptions">5</h3>
+              <div class="sub-text">All hospitals</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Subscriptions</h4>
+              <h3 id="activeSubscriptions">4</h3>
+              <div class="sub-text">80% Active Rate</div>
+            </div>
+
+            <div class="card">
+              <h4>Monthly Revenue</h4>
+              <h3 id="subscriptionRevenue">₹1,70,000</h3>
+              <div class="sub-text">From subscriptions</div>
+            </div>
+
+            <div class="card">
+              <h4>Expiring Soon</h4>
+              <h3 id="expiringSubscriptions">2</h3>
+              <div class="sub-text">Next 30 days</div>
+            </div>
+          </div>
+
+          <!-- SUBSCRIPTION PLANS -->
+          <div class="section-header">
+            <h2>Subscription Plans</h2>
+            <button class="primary-btn" onclick="createNewPlan()">+ Create New Plan</button>
+          </div>
+
+          <div class="plans-grid">
+            <div class="plan-card basic">
+              <div class="plan-header">
+                <h3>Basic Plan</h3>
+                <div class="plan-price">₹5,000<span>/month</span></div>
+              </div>
+              <div class="plan-features">
+                <div class="feature">✓ OP Module</div>
+                <div class="feature">✓ Lab Module</div>
+                <div class="feature">✓ Basic Reports</div>
+                <div class="feature">✓ Email Support</div>
+              </div>
+              <div class="plan-stats">
+                <div class="stat">1 Hospital</div>
+                <div class="stat">₹5,000/month</div>
+              </div>
+            </div>
+
+            <div class="plan-card standard">
+              <div class="plan-header">
+                <h3>Standard Plan</h3>
+                <div class="plan-price">₹8,000<span>/month</span></div>
+              </div>
+              <div class="plan-features">
+                <div class="feature">✓ All Basic Features</div>
+                <div class="feature">✓ Billing Module</div>
+                <div class="feature">✓ Advanced Reports</div>
+                <div class="feature">✓ Phone Support</div>
+              </div>
+              <div class="plan-stats">
+                <div class="stat">2 Hospitals</div>
+                <div class="stat">₹16,000/month</div>
+              </div>
+            </div>
+
+            <div class="plan-card premium">
+              <div class="plan-header">
+                <h3>Premium Plan</h3>
+                <div class="plan-price">₹15,000<span>/month</span></div>
+                <div class="plan-badge">Most Popular</div>
+              </div>
+              <div class="plan-features">
+                <div class="feature">✓ All Standard Features</div>
+                <div class="feature">✓ Pharmacy Module</div>
+                <div class="feature">✓ Custom Reports</div>
+                <div class="feature">✓ 24/7 Support</div>
+              </div>
+              <div class="plan-stats">
+                <div class="stat">2 Hospitals</div>
+                <div class="stat">₹30,000/month</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTIVE SUBSCRIPTIONS -->
+          <div class="section-header">
+            <h2>Active Subscriptions</h2>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital</th>
+                  <th>Plan</th>
+                  <th>Start Date</th>
+                  <th>Expiry Date</th>
+                  <th>Monthly Cost</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subscriptionsTableBody">
+                <tr>
+                  <td><strong>Apollo Hospitals</strong><br><small>HSP-1001</small></td>
+                  <td><span class="plan-badge premium">Premium</span></td>
+                  <td>2025-03-15</td>
+                  <td>2026-03-15</td>
+                  <td>₹15,000</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewSubscription('HSP-1001')">View</button>
+                    <button class="action-btn edit" onclick="editSubscription('HSP-1001')">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Fortis Healthcare</strong><br><small>HSP-1002</small></td>
+                  <td><span class="plan-badge standard">Standard</span></td>
+                  <td>2025-02-10</td>
+                  <td>2026-02-10</td>
+                  <td>₹8,000</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewSubscription('HSP-1002')">View</button>
+                    <button class="action-btn edit" onclick="editSubscription('HSP-1002')">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Max Healthcare</strong><br><small>HSP-1003</small></td>
+                  <td><span class="plan-badge premium">Premium</span></td>
+                  <td>2025-01-20</td>
+                  <td>2026-01-20</td>
+                  <td>₹15,000</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn view" onclick="viewSubscription('HSP-1003')">View</button>
+                    <button class="action-btn edit" onclick="editSubscription('HSP-1003')">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>AIIMS Delhi</strong><br><small>HSP-1005</small></td>
+                  <td><span class="plan-badge basic">Basic</span></td>
+                  <td>2025-01-01</td>
+                  <td>2026-01-01</td>
+                  <td>₹5,000</td>
+                  <td><span class="status inactive">Inactive</span></td>
+                  <td>
+                    <button class="action-btn activate" onclick="activateSubscription('HSP-1005')">Activate</button>
+                    <button class="action-btn edit" onclick="editSubscription('HSP-1005')">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Create Hospital Modal -->
+    <div class="modal" id="createHospitalModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Add New Hospital</h3>
+          <button class="close-btn" onclick="closeCreateHospital()">&times;</button>
+        </div>
+        
+        <form id="createHospitalForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hospital Name *</label>
+              <input type="text" id="hospitalName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Code</label>
+              <input type="text" id="hospitalCode" readonly value="HSP-1013" />
+            </div>
+
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="streetAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="city" required />
+            </div>
+
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="state" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="phoneNumber" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="emailAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>Subscription Plan *</label>
+              <select id="subscriptionPlan" required>
+                <option value="">Select Plan</option>
+                <option value="basic">Basic - ₹5,000/month</option>
+                <option value="standard">Standard - ₹8,000/month</option>
+                <option value="premium">Premium - ₹15,000/month</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Hospital Logo</label>
+              <div class="file-upload">
+                <input type="file" id="hospitalLogo" accept="image/*" onchange="previewLogo()" />
+                <div class="upload-preview" id="logoPreview">
+                  <span>Click to upload logo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="resetHospitalForm()">Reset Form</button>
+            <button type="submit" class="primary-btn">Save Hospital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Hospital Modal -->
+    <div class="modal" id="editHospitalModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Edit Hospital</h3>
+          <button class="close-btn" onclick="closeEditHospital()">&times;</button>
+        </div>
+        
+        <form id="editHospitalForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hospital Name *</label>
+              <input type="text" id="editHospitalName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Code</label>
+              <input type="text" id="editHospitalCode" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="editStreetAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="editCity" required />
+            </div>
+
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="editState" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="editPhoneNumber" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="editEmailAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>Subscription Plan *</label>
+              <select id="editSubscriptionPlan" required>
+                <option value="">Select Plan</option>
+                <option value="basic">Basic - ₹5,000/month</option>
+                <option value="standard">Standard - ₹8,000/month</option>
+                <option value="premium">Premium - ₹15,000/month</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Status</label>
+              <select id="editHospitalStatus" required>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="closeEditHospital()">Cancel</button>
+            <button type="submit" class="primary-btn">Update Hospital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add New User Modal -->
+    <div class="modal" id="addUserModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Add New User</h3>
+          <button class="close-btn" onclick="closeAddUser()">&times;</button>
+        </div>
+        
+        <form id="addUserForm">
+          <div class="form-grid">
+            <!-- Personal Information -->
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" id="userFirstName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" id="userLastName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="userEmail" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="userPhone" required />
+            </div>
+
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="userDOB" />
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="userGender">
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Role and Hospital Assignment -->
+            <div class="form-group">
+              <label>User Role *</label>
+              <select id="userRole" required onchange="updateRoleFields()">
+                <option value="">Select Role</option>
+                <option value="front-desk">Front Desk / OP Staff</option>
+                <option value="doctor">Doctor</option>
+                <option value="nurse">Nurse</option>
+                <option value="lab-tech">Lab Technician</option>
+                <option value="pharmacist">Pharmacist</option>
+                <option value="billing">Billing Staff</option>
+                <option value="admin">Hospital Admin</option>
+                <option value="patient">Patient</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Assignment *</label>
+              <select id="userHospital" required>
+                <option value="">Select Hospital</option>
+                <option value="HSP-1001">Apollo Hospitals - Hyderabad</option>
+                <option value="HSP-1002">Fortis Healthcare - Mumbai</option>
+                <option value="HSP-1003">Max Healthcare - Delhi</option>
+                <option value="HSP-1004">Manipal Hospitals - Bangalore</option>
+                <option value="HSP-1005">AIIMS Delhi - Delhi</option>
+              </select>
+            </div>
+
+            <!-- Role-specific fields -->
+            <div class="form-group" id="doctorFields" style="display: none;">
+              <label>Specialization</label>
+              <select id="doctorSpecialization">
+                <option value="">Select Specialization</option>
+                <option value="cardiology">Cardiology</option>
+                <option value="dermatology">Dermatology</option>
+                <option value="orthopedics">Orthopedics</option>
+                <option value="gynecology">Gynecology</option>
+                <option value="neurology">Neurology</option>
+                <option value="pediatrics">Pediatrics</option>
+                <option value="ent">ENT</option>
+                <option value="ophthalmology">Ophthalmology</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="doctorLicense" style="display: none;">
+              <label>Medical License Number</label>
+              <input type="text" id="doctorLicenseNumber" />
+            </div>
+
+            <div class="form-group" id="nurseFields" style="display: none;">
+              <label>Nursing License Number</label>
+              <input type="text" id="nurseLicenseNumber" />
+            </div>
+
+            <div class="form-group" id="labFields" style="display: none;">
+              <label>Lab Certification</label>
+              <input type="text" id="labCertification" />
+            </div>
+
+            <!-- Account Credentials -->
+            <div class="form-group">
+              <label>Username *</label>
+              <input type="text" id="userUsername" required />
+            </div>
+
+            <div class="form-group">
+              <label>Temporary Password *</label>
+              <input type="password" id="userPassword" required />
+            </div>
+
+            <!-- Address Information -->
+            <div class="form-group full-width">
+              <label>Address</label>
+              <textarea id="userAddress" rows="3" placeholder="Enter full address"></textarea>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="form-group">
+              <label>Emergency Contact Name</label>
+              <input type="text" id="emergencyContactName" />
+            </div>
+
+            <div class="form-group">
+              <label>Emergency Contact Phone</label>
+              <input type="tel" id="emergencyContactPhone" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="closeAddUser()">Cancel</button>
+            <button type="submit" class="primary-btn">Create User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="super_admin_dashboard.js"></script>
+  </body>
+</html>

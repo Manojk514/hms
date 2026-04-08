@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>New Appointment - ITiVAT MED</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="new_patient.css" />
+
+<style>
+@media print {
+  body * { visibility: hidden; }
+  #receiptPrint, #receiptPrint * { visibility: visible; }
+  #receiptPrint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+td, th { border: 1px solid #000; padding: 6px; }
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 AUTH -->
+<script type="module">
+  import { protectPage, logout } from "./auth.js";
+  protectPage();
+  window.logout = logout;
+</script>
+
+<header class="header">
+  <button onclick="location.href='op_dashboard.html'">← Back</button>
+  <h1>ITiVAT MED</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<main class="main-content">
+<section class="card">
+
+<h2>Add New Appointment</h2>
+
+<div class="form-grid">
+  <input id="patientName" placeholder="Patient Name" />
+  <input id="phone" placeholder="Phone" maxlength="10" />
+  <select id="doctor">
+    <option value="">Select Doctor</option>
+    <option>Dr.S.Mishra</option>
+    <option>Dr.B.Prathima</option>
+  </select>
+  <input id="refDoctor" placeholder="Ref Doctor" />
+  <input id="age" placeholder="Age" />
+  <select id="sex">
+    <option value="">Sex</option>
+    <option>Male</option>
+    <option>Female</option>
+  </select>
+  <input id="date" type="date" />
+  <input id="time" type="time" />
+  <input id="bp" placeholder="BP" />
+  <input id="sugar" placeholder="Sugar" />
+  <input id="weight" placeholder="Weight" />
+</div>
+
+<textarea id="history" placeholder="Medical History"></textarea>
+
+<h3>Billing</h3>
+
+<div class="form-grid">
+  <input id="billNumber" readonly />
+  <input id="opAmount" type="number" value="750" />
+  <input id="discountPercent" placeholder="Discount %" />
+  <input id="discountAmount" readonly />
+  <input id="finalAmount" readonly />
+  <select id="paymentType">
+    <option>Cash</option>
+    <option>UPI</option>
+    <option>Card</option>
+  </select>
+  <select id="paymentStatus">
+  <option value="Pending">Pending</option>
+  <option value="Paid">Paid</option>
+</select>
+
+</div>
+
+<div class="btn-row">
+  <button id="saveBtn">Save</button>
+  <button onclick="printBill('DIA')">Diab Print</button>
+  <button onclick="printBill('NEURO')">Jagsan Print</button>
+  <button onclick="location.href='op_dashboard.html'">Cancel</button>
+</div>
+
+</section>
+</main>
+
+<!-- ================= RECEIPT ================= -->
+<div id="receiptPrint" style="display:none; padding:20px; font-family:Arial;">
+  <div style="display:flex; align-items:center;">
+    <img id="rLogo" style="height:60px;" />
+    <div style="flex:1; text-align:center;">
+      <h2 id="rClinic"></h2>
+      <div id="rAddress"></div>
+      <h3>Bill Receipt</h3>
+    </div>
+  </div>
+
+  <table style="margin-top:10px;">
+    <tr>
+      <td><b>Patient Name</b>: <span id="rPatient"></span></td>
+      <td><b>Bill No</b>: <span id="rBill"></span></td>
+    </tr>
+    <tr>
+      <td><b>Mobile</b>: <span id="rPhone"></span></td>
+      <td><b>Date</b>: <span id="rDate"></span></td>
+    </tr>
+    <tr>
+      <td><b>Age / Sex</b>: <span id="rAgeSex"></span></td>
+      <td><b>Doctor</b>: <span id="rDoctor"></span></td>
+    </tr>
+  </table>
+
+  <table style="margin-top:10px;">
+    <tr>
+      <th>S.No</th>
+      <th>Service</th>
+      <th>Amount</th>
+      <th>Discount</th>
+      <th>Final</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>OP Consultation</td>
+      <td>₹<span id="rOpAmt"></span></td>
+      <td>₹<span id="rDisc"></span></td>
+      <td>₹<span id="rFinal"></span></td>
+    </tr>
+    <tr>
+      <td colspan="4" style="text-align:right;"><b>Paid Amount</b></td>
+      <td>₹<span id="rPaid"></span></td>
+    </tr>
+  </table>
+
+  <p><b>Received an Amount of:</b> <span id="rWords"></span></p>
+
+  <div style="display:flex; justify-content:space-between; margin-top:40px;">
+    <span>Received with thanks</span>
+    <span>Signature</span>
+  </div>
+</div>
+
+<script>
+//date.value = new Date().toISOString().split("T")[0];
+const today = new Date();
+const localDate = today.toLocaleDateString('en-CA'); // YYYY-MM-DD
+date.value = localDate;
+
+billNumber.value = "BILL-" + Date.now();
+
+function calculateBilling() {
+  const amt = Number(opAmount.value || 0);
+  const dis = Number(discountPercent.value || 0);
+  const dAmt = amt * dis / 100;
+  discountAmount.value = dAmt.toFixed(2);
+  finalAmount.value = (amt - dAmt).toFixed(2);
+}
+opAmount.oninput = calculateBilling;
+discountPercent.oninput = calculateBilling;
+calculateBilling();
+
+const PRINT_CFG = {
+  DIA: {
+    logo: "./diablogo.png",
+    name: "DIAB NEURO CENTER",
+    addr: "Vidyanagar, Hyderabad"
+  },
+  NEURO: {
+    logo: "./jagsanlogo.png",
+    name: "JAGSAN Diagnostics",
+    addr: "Gandhi Nagar, Hyderabad"
+  }
+};
+
+
+function printBill(type) {
+  const c = PRINT_CFG[type];
+
+  // Set text fields
+  rClinic.innerText = c.name;
+  rAddress.innerText = c.addr;
+
+  rPatient.innerText = patientName.value;
+  rPhone.innerText = phone.value;
+  rAgeSex.innerText = age.value + " / " + sex.value;
+  rDoctor.innerText = doctor.value;
+  rBill.innerText = billNumber.value;
+  rDate.innerText = date.value;
+
+  rOpAmt.innerText = opAmount.value;
+  rDisc.innerText = discountAmount.value;
+  rFinal.innerText = finalAmount.value;
+  rPaid.innerText = finalAmount.value;
+  rWords.innerText = "Rupees " + finalAmount.value + " Only";
+
+  // 🔥 IMPORTANT PART
+  receiptPrint.style.display = "block";
+
+  // FORCE logo reload
+  rLogo.onload = function () {
+    // ONLY print after logo is fully loaded
+    window.print();
+    setTimeout(() => {
+      receiptPrint.style.display = "none";
+      rLogo.onload = null; // cleanup
+    }, 500);
+  };
+
+  rLogo.onerror = function () {
+    // Even if logo fails, still print
+    window.print();
+    setTimeout(() => {
+      receiptPrint.style.display = "none";
+      rLogo.onload = null;
+    }, 500);
+  };
+
+  rLogo.src = c.logo + "?v=" + Date.now(); // set AFTER handlers
+}
+
+
+</script>
+<script type="module">
+import { db } from "./auth.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Set date
+document.getElementById("date").value = new Date().toISOString().split("T")[0];
+
+// Generate bill number
+function generateBillNumber() {
+  const now = new Date();
+  return "BILL-" + now.getFullYear() + String(now.getMonth() + 1).padStart(2, "0") + 
+         String(now.getDate()).padStart(2, "0") + "-" + Math.floor(1000 + Math.random() * 9000);
+}
+document.getElementById("billNumber").value = generateBillNumber();
+
+// Calculate billing
+function calculateBilling() {
+  const amt = Number(document.getElementById("opAmount").value || 0);
+  const dis = Number(document.getElementById("discountPercent").value || 0);
+  const dAmt = amt * dis / 100;
+  document.getElementById("discountAmount").value = dAmt.toFixed(2);
+  document.getElementById("finalAmount").value = (amt - dAmt).toFixed(2);
+}
+
+document.getElementById("opAmount").addEventListener("input", calculateBilling);
+document.getElementById("discountPercent").addEventListener("input", calculateBilling);
+calculateBilling();
+
+// Generate OP Number
+async function generateOpNumber(date) {
+  const d = date.replaceAll("-", "");
+  const q = query(collection(db, "appointments"), where("date", "==", date));
+  const snap = await getDocs(q);
+  return `OP-${d}-${String(snap.size + 1).padStart(3, "0")}`;
+}
+
+// SAVE
+document.getElementById("saveBtn").onclick = async function() {
+  const name = document.getElementById("patientName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const doctor = document.getElementById("doctor").value;
+  const sex = document.getElementById("sex").value;
+  const dateVal = document.getElementById("date").value;
+  const timeVal = document.getElementById("time").value;
+  
+  if (!name || !phone || !doctor || !sex || !dateVal || !timeVal) {
+    alert("Please fill all required fields!");
+    return;
+  }
+  
+  const opNo = await generateOpNumber(dateVal);
+  const finalAmt = Number(document.getElementById("finalAmount").value);
+  
+  await addDoc(collection(db, "appointments"), {
+    opNo,
+    name,
+    phone,
+    doctor,
+    sex,
+    refDoctor: document.getElementById("refDoctor").value || "",
+    age: document.getElementById("age").value || "",
+    date: dateVal,
+    time: timeVal,
+    bp: document.getElementById("bp").value || "",
+    sugar: document.getElementById("sugar").value || "",
+    weight: document.getElementById("weight").value || "",
+    history: document.getElementById("history").value || "",
+    billing: {
+      billNumber: document.getElementById("billNumber").value,
+      opAmount: Number(document.getElementById("opAmount").value),
+      discountPercent: Number(document.getElementById("discountPercent").value || 0),
+      discountAmount: Number(document.getElementById("discountAmount").value || 0),
+      finalAmount: finalAmt,
+      paymentType: document.getElementById("paymentType").value
+    },
+    amount: finalAmt,
+    payment: document.getElementById("paymentStatus").value,
+    createdAt: serverTimestamp()
+  });
+  
+  alert("SAVED! " + opNo);
+  location.href = "op_dashboard.html";
+};
+</script>
+</body>
+</html>

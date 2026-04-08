@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctor Dashboard - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="doctor_dashboard.css?v=20260403v2" />
+</head>
+
+<body class="page-loading">
+
+<!-- HEADER -->
+<header class="header">
+  <button class="back-btn" onclick="location.href='../index.html'">← Back to Home</button>
+  <h1>ITiVAT MED - Doctor Portal</h1>
+  <div style="display: flex; gap: 12px;">
+    <button class="back-btn" onclick="location.href='doctor_profile.html'">👤 Profile</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- WELCOME SECTION -->
+<section class="welcome-section">
+  <div class="welcome-content">
+    <h2>Welcome, Dr. <span id="doctorName">Loading...</span></h2>
+    <p class="welcome-subtitle">Loading...</p>
+    <p class="current-date" id="currentDate"></p>
+  </div>
+</section>
+
+<!-- SUMMARY CARDS -->
+<section class="stats-container">
+  <div class="stat-card blue">
+    <div class="stat-icon">📅</div>
+    <div class="stat-content">
+      <h3 id="todayAppointments">...</h3>
+      <p>Today's Appointments</p>
+    </div>
+  </div>
+
+  <div class="stat-card green">
+    <div class="stat-icon">✅</div>
+    <div class="stat-content">
+      <h3 id="completedConsultations">...</h3>
+      <p>Completed Consultations</p>
+    </div>
+  </div>
+
+  <div class="stat-card orange">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-content">
+      <h3 id="pendingFollowups">...</h3>
+      <p>Pending Follow-ups</p>
+    </div>
+  </div>
+
+  <div class="stat-card purple">
+    <div class="stat-icon">👥</div>
+    <div class="stat-content">
+      <h3 id="totalPatients">...</h3>
+      <p>Total Assigned Patients</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK ACTIONS -->
+<section class="quick-actions">
+  <button class="action-btn primary" onclick="location.href='doctor_appointments.html'">
+    📋 View All Appointments
+  </button>
+  <button class="action-btn secondary" onclick="viewPendingFollowups()">
+    🔔 Pending Follow-ups
+  </button>
+  <button class="action-btn secondary" onclick="viewPatientHistory()">
+    📊 Patient History
+  </button>
+</section>
+
+<!-- TODAY'S SCHEDULE -->
+<section class="schedule-section">
+  <div class="section-header">
+    <h2>Today's Schedule</h2>
+    <button class="btn-refresh" onclick="refreshSchedule()">🔄 Refresh</button>
+  </div>
+
+  <div class="schedule-container" id="scheduleContainer">
+    <!-- Schedule items will be loaded here -->
+  </div>
+</section>
+
+<script src="doctor_dashboard.js?v=20260403v5"></script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+/* ================= BASE ================= */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+/* ================= TOP BAR ================= */
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.back-btn {
+  border: 1px solid #cbd5f5;
+  background: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.brand {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  height: 38px;
+}
+
+.logout-btn {
+  border: 1px solid #e5e7eb;
+  background: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ================= LAYOUT ================= */
+.layout {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 240px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  padding: 16px 0;
+}
+
+.menu {
+  padding: 14px 22px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 12px;
+  margin: 6px 12px;
+  transition: all 0.2s ease;
+}
+
+.menu:hover {
+  background: #f1f5f9;
+}
+
+.menu.active {
+  background: #eef4ff;
+  color: #1e4fa1;
+  font-weight: 600;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+/* ================= TITLES ================= */
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+/* ================= TODAY OVERVIEW ================= */
+.stats {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: white;
+  padding: 28px;
+  border-radius: 18px;
+  width: 280px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
+.card h4 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+.card h3 {
+  font-size: 30px;
+  color: #1e4fa1;
+  margin: 0;
+}
+
+/* Revenue split (OP / Labs) */
+.card .sub-text {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* ================= CONTROLS ================= */
+.top-controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 10px 0 26px;
+}
+
+.top-controls input {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #cbd5f5;
+  width: 280px;
+  font-size: 14px;
+}
+
+/* ================= BUTTONS ================= */
+button {
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.excel-btn {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ================= TABS ================= */
+.tabs {
+  margin-left: auto;
+  display: flex;
+  gap: 12px;
+}
+
+.tab {
+  padding: 12px 22px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  background: #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tab.active {
+  background: #1e4fa1;
+  color: white;
+}
+
+/* ================= TABLE ================= */
+.table-box {
+  background: white;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+th {
+  background: #f8fafc;
+  text-align: left;
+  font-weight: 600;
+}
+
+tr:hover td {
+  background: #f9fbff;
+}
+
+/* ================= PAGINATION ================= */
+.pagination {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #cbd5f5;
+  background: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(#f4f7fb, #e9eef5);
+  color: #1f2937;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 35px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px; /* ✅ BIGGER */
+  font-weight: 700;
+}
+
+.header p {
+  margin-top: 8px;
+  font-size: 18px; /* ✅ BIGGER */
+  color: #555;
+}
+
+/* MAIN */
+.main-container {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+}
+
+/* LEFT */
+.specialities {
+  flex: 2;
+  background: #eef2f9;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.specialities h2 {
+  font-size: 26px; /* ✅ BIGGER */
+  margin-bottom: 20px;
+}
+
+.speciality-list {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.spec-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  font-size: 17px; /* ✅ BIGGER */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.spec-card:hover {
+  transform: translateX(6px);
+}
+
+/* RIGHT */
+.login-container {
+  flex: 1;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+  font-size: 26px; /* ✅ BIGGER */
+  margin-bottom: 20px;
+}
+
+.login-container label {
+  font-size: 16px; /* ✅ BIGGER */
+}
+
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 18px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 14px;
+  background: #1e4fa1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px; /* ✅ BIGGER */
+  cursor: pointer;
+}
+
+.link {
+  display: block;
+  text-align: center;
+  margin: 14px 0;
+  font-size: 15px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.new {
+  text-align: center;
+  font-size: 15px;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 20px;
+  background: #f9fafb;
+}
+
+.stats h3 {
+  margin: 0;
+  font-size: 34px; /* ✅ BIGGER */
+  color: #1e4fa1;
+}
+
+.stats p {
+  font-size: 16px;
+}
+
+/* FOOTER – FULL WIDTH */
+.footer {
+  width: 100%;
+  background: #0f172a;
+  color: #ccc;
+  padding: 40px 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  font-size: 15px; /* ✅ BIGGER */
+}
+
+.footer strong {
+  color: white;
+  font-size: 17px;
+}

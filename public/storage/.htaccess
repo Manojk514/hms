@@ -1,0 +1,11 @@
+# Allow direct access to uploaded files
+# Files are stored in public/storage/uploads/
+<IfModule mod_rewrite.c>
+    RewriteEngine Off
+</IfModule>
+
+# Security: Prevent PHP execution
+<FilesMatch "\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

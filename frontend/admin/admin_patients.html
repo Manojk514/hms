@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Patients - ITiVAT MED</title>
+    <link rel="stylesheet" href="admin_dashboard.css" />
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <button
+        class="back-btn"
+        onclick="window.location.href = 'admin_dashboard.html'"
+      >
+        ← Back
+      </button>
+      <div class="brand"><h2>ITiVAT MED</h2></div>
+    </div>
+
+    <div class="content">
+      <h1 class="dashboard-title">Patients Overview</h1>
+
+      <div class="stats" id="patientsContainer"></div>
+    </div>
+
+    <script type="module" src="admin_patients.js"></script>
+  </body>
+</html>

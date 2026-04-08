@@ -1,0 +1,321 @@
+/* ================= RESET ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  background: #f4f6f9;
+  color: #0f172a;
+}
+
+/* ================= HEADER ================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.back-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  cursor: pointer;
+}
+
+.logout-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* ================= MAIN CARD ================= */
+.main-content {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+  font-size: 26px;
+  margin-bottom: 24px;
+}
+
+/* ================= FORM GRID ================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  grid-column: span 3;
+}
+
+.input-wrapper label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.input-wrapper input,
+.input-wrapper select,
+textarea {
+  padding: 12px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  outline: none;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus,
+textarea:focus {
+  border-color: #2563eb;
+}
+
+/* ================= GRID WIDTH CONTROL ================= */
+.input-wrapper:nth-child(1),
+.input-wrapper:nth-child(2) {
+  grid-column: span 6;
+}
+
+textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  margin-top: 12px;
+}
+
+/* ================= FILE UPLOAD ================= */
+.file-row {
+  margin-top: 18px;
+}
+
+/* ================= SECTION HEADINGS ================= */
+h3 {
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 20px;
+  color: #1e293b;
+}
+
+/* ================= BILLING ================= */
+.billing-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.billing-row .input-wrapper {
+  grid-column: span 2;
+}
+
+/* ================= SERVICES ================= */
+#servicesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.service-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.service-row .input-wrapper {
+  grid-column: span 2;
+}
+
+.service-name-wrapper {
+  grid-column: span 4;
+}
+
+.remove-service-btn {
+  align-self: flex-end;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+/* ================= BUTTONS ================= */
+.add-service-btn,
+.calculate-btn {
+  margin-top: 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-service-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.calculate-btn {
+  background: #16a34a;
+  color: white;
+}
+
+/* ================= TOTALS ================= */
+.totals-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.total-item {
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.total-item.highlight {
+  background: #dcfce7;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* ================= ACTION BUTTONS ================= */
+.btn-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.btn-primary {
+  background: #1e4fa1;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: white;
+  border: 2px solid #cbcce1;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.main-content {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 20px;
+  width: 100%;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.totals-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 12px;
+}
+.totals-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 12px;
+}
+.card {
+  overflow-x: hidden;
+}
+h2, h3 {
+  color: #1f3c88;
+}
+
+input, select, textarea {
+  border: 1px solid #cfd8dc;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #1f3c88;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(31, 60, 136, 0.1);
+}
+
+button {
+  background-color: #1f3c88;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #163172;
+}

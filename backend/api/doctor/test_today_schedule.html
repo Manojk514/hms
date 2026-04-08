@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Today's Schedule API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        input, button {
+            padding: 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        input {
+            width: 300px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 30px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .appointment-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .appointment-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .time {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-PENDING {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-IN_PROGRESS {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .status-COMPLETED {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-CANCELLED {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .complaint {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .count-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Today's Appointment Schedule API Test</h1>
+        
+        <div class="info">
+            <strong>API Endpoint:</strong> /backend/api/doctor/today_schedule.php<br>
+            <strong>Method:</strong> GET<br>
+            <strong>Parameter:</strong> doctor_id (required)
+        </div>
+
+        <div class="test-section">
+            <h3>Fetch Today's Schedule</h3>
+            <label for="doctorId">Doctor ID:</label><br>
+            <input type="number" id="doctorId" placeholder="e.g., 1" value="1">
+            <br><br>
+            <button onclick="fetchSchedule()">📋 Get Today's Appointments</button>
+            
+            <div id="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Notes</h3>
+            <ul>
+                <li>Enter a doctor ID to fetch their today's appointments</li>
+                <li>The API returns appointments ordered by time</li>
+                <li>Empty schedules are handled gracefully</li>
+                <li>All times are displayed in 12-hour format (AM/PM)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost/HMS/backend/api/doctor';
+
+        async function fetchSchedule() {
+            const doctorId = document.getElementById('doctorId').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!doctorId) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a doctor ID</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="result">Loading schedule...</div>';
+
+            try {
+                console.log('📅 Fetching schedule for doctor ID:', doctorId);
+                
+                const response = await fetch(`${API_BASE_URL}/today_schedule.php?doctor_id=${doctorId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+
+                console.log('📥 Response status:', response.status);
+                
+                const result = await response.json();
+                console.log('📥 API Response:', result);
+
+                if (result.success) {
+                    const appointments = result.data.appointments;
+                    const count = result.data.count;
+                    
+                    if (count === 0) {
+                        resultDiv.innerHTML = `
+                            <div class="result success">
+                                <div class="empty-state">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <h3>No Appointments Today</h3>
+                                    <p>Doctor ID ${doctorId} has no appointments scheduled for today (${result.data.date})</p>
+                                </div>
+                                <h4>Raw JSON Response:</h4>
+                                <pre>${JSON.stringify(result, null, 2)}</pre>
+                            </div>
+                        `;
+                    } else {
+                        let appointmentsHTML = appointments.map(apt => `
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <span class="time">🕐 ${apt.time}</span>
+                                    <span class="status status-${apt.status}">${apt.status}</span>
+                                </div>
+                                <div class="patient-info">
+                                    <div class="info-item">
+                                        <span class="info-label">👤 Patient:</span>
+                                        <span>${apt.patient}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🎂 Age:</span>
+                                        <span>${apt.age} years</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">⚧ Gender:</span>
+                                        <span>${apt.gender}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">📞 Phone:</span>
+                                        <span>${apt.phone}</span>
+                                    </div>
+                                </div>
+                                <div class="complaint">
+                                    <strong>Chief Complaint:</strong> ${apt.complaint}
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        resultDiv.innerHTML = `
+                            <div class="result success">
+                                <h3>✅ Schedule Retrieved Successfully</h3>
+                                <p><strong>Date:</strong> ${result.data.date}</p>
+                                <span class="count-badge">${count} Appointment${count > 1 ? 's' : ''} Today</span>
+                                
+                                <div style="margin-top: 20px;">
+                                    ${appointmentsHTML}
+                                </div>
+                                
+                                <h4 style="margin-top: 30px;">Raw JSON Response:</h4>
+                                <pre>${JSON.stringify(result, null, 2)}</pre>
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Error</h3>
+                            <p>${result.message}</p>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Request Failed</h3>
+                        <p>${error.message}</p>
+                        <p>Make sure XAMPP is running and the API endpoint is accessible.</p>
+                    </div>
+                `;
+            }
+        }
+
+        window.onload = function() {
+            console.log('✅ Today Schedule Test Page Loaded');
+            console.log('API Base URL:', API_BASE_URL);
+        };
+    </script>
+</body>
+</html>

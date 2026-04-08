@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OP Dashboard - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="op_dashboard.css" />
+
+  <!-- Firebase (Auth only) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyAHk_3j17dq7uG-UC9fr3lIES_bcnqKjFc",
+  authDomain: "itivat-med-hms.firebaseapp.com",
+  projectId: "itivat-med-hms",
+  storageBucket: "itivat-med-hms.firebasestorage.app",
+  messagingSenderId: "690474532008",
+  appId: "1:690474532008:web:4c8c4ceca7a2042cca569d"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 🔐 Protect dashboard
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.replace("op_login.html");
+      }
+    });
+
+    // 🔓 Logout
+    window.logout = function () {
+      signOut(auth).then(() => {
+        window.location.replace("op_login.html");
+      });
+    };
+  </script>
+</head>
+
+<body>
+
+<header class="header">
+  <button onclick="location.href='index.html'">← Back to Home</button>
+  <h1>ITiVAT MED</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<section class="top-bar">
+  <!-- LEFT: SEARCH -->
+  <div class="top-left">
+    <input
+      id="searchInput"
+      placeholder="Search OP / Phone / Name"
+      class="search-input"
+    />
+
+    <input type="date" id="dateFilter" class="date-input" />
+
+    <button class="btn primary" onclick="applyDateFilter()">Filter</button>
+  </div>
+
+  <!-- CENTER: ACTIONS -->
+  <div class="top-center">
+    <button class="btn excel" onclick="downloadExcel()">Excel</button>
+    <button class="btn primary" onclick="location.href='new_patient.html'">
+      + Appointment
+    </button>
+    <button class="btn primary" onclick="location.href='add_labs.html'">
+      + Labs
+    </button>
+  </div>
+
+  <!-- RIGHT: TABS -->
+  <div class="top-right tabs">
+    <button
+      class="tab-btn active"
+      id="tabAppointments"
+      onclick="showAppointments()"
+    >
+      Appointments
+    </button>
+    <button
+      class="tab-btn"
+      id="tabLabs"
+      onclick="showLabs()"
+    >
+      Labs
+    </button>
+  </div>
+</section>
+<!-- APPOINTMENTS SECTION -->
+<div id="appointmentsSection">
+  <table class="op-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>OP No</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Doctor</th>
+        <th>Ref. Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="appointmentsTableBody"></tbody>
+  </table>
+</div>
+
+<!-- LABS SECTION (HIDDEN BY DEFAULT) -->
+<div id="labsSection" style="display:none;">
+  <table class="lab-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Patient ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Doctor</th>
+        <!-- <th>Ref. Doctor</th> -->
+        <th>Date</th>
+        <!-- <th>Time</th> -->
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="labsTableBody"></tbody>
+  </table>
+</div>
+
+<div id="pagination" style="margin-top:20px; text-align:center;"></div>
+
+
+<!-- Modal -->
+<div id="modal" style="display:none;">
+  <div id="modalContent"></div>
+  <button onclick="closeModal()">Close</button>
+</div>
+
+<!-- Dashboard Logic -->
+<script type="module" src="op_dashboard.js"></script>
+
+</body>
+</html>

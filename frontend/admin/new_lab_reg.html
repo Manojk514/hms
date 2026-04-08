@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New Register - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="new_patient.css" />
+</head>
+
+<body>
+
+<!-- 🔐 AUTH GUARD -->
+<script type="module">
+  import { protectPage, logout } from "./auth.js";
+  protectPage();
+  window.logout = logout;
+</script>
+
+<!-- 🔥 FIRESTORE SAVE LOGIC -->
+<script type="module">
+  import { db } from "./auth.js";
+  import {
+    collection,
+    addDoc,
+    serverTimestamp,
+    getDocs,
+    query,
+    where
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // 🔢 OP NUMBER GENERATOR
+  async function generateOpNumber(date) {
+    const d = date.replaceAll("-", "");
+    const q = query(
+      collection(db, "appointments"),
+      where("date", "==", date)
+    );
+
+    const snap = await getDocs(q);
+    const count = snap.size + 1;
+
+    return `OP-${d}-${String(count).padStart(3, "0")}`;
+  }
+
+  window.saveAppointment = async function () {
+    const dateVal = document.getElementById("date").value;
+
+    if (!dateVal) {
+      alert("Select date");
+      return;
+    }
+
+    // ✅ Generate OP No BEFORE saving
+    const opNo = await generateOpNumber(dateVal);
+
+    const appointment = {
+      opNo: opNo,
+      name: document.getElementById("patientName").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      doctor: document.getElementById("doctor").value,
+      refDoctor: document.getElementById("refDoctor").value.trim(),
+      age: document.getElementById("age").value || "",
+      date: dateVal,
+      history: document.getElementById("history").value || "",
+      payment: "Pending",
+      createdAt: serverTimestamp()
+    };
+
+    // ✅ VALIDATIONS
+    if (!appointment.name) return alert("Patient name required");
+    if (!/^[0-9]{10}$/.test(appointment.phone))
+      return alert("Invalid phone number");
+    if (!appointment.doctor) return alert("Select doctor");
+
+    try {
+      await addDoc(collection(db, "appointments"), appointment);
+      alert(`Appointment saved ✅\n${opNo}`);
+      window.location.href = "add_labs.html";
+    } catch (err) {
+      console.error("Firestore error:", err);
+      alert("Failed to save appointment ❌");
+    }
+  };
+</script>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <button class="back-btn" onclick="window.location.href='add_labs.html'">
+      ← Back
+    </button>
+  </div>
+
+  <div class="header-center">
+    <img src="itivat_logo.jpg" class="logo-placeholder" />
+    <h1>ITiVAT MED</h1>
+  </div>
+
+  <div class="header-right">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main-content">
+  <section class="card">
+    <h2>New Register</h2>
+
+    <div class="form-grid">
+      <input id="patientName" placeholder="Patient Name" style="grid-column: span 6;" />
+      <input
+        id="phone"
+        placeholder="Phone"
+        maxlength="10"
+        inputmode="numeric"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        style="grid-column: span 6;"
+      />
+    </div>
+
+    <div class="form-grid" style="margin-top: 16px;">
+      <input id="age" type="number" placeholder="Age" style="grid-column: span 6;" />
+      <input id="date" type="date" placeholder="Bill Date" style="grid-column: span 6;" />
+    </div>
+
+    <div class="form-grid" style="margin-top: 16px;">
+      <select id="doctor" style="grid-column: span 6;">
+        <option value="">Select Doctor</option>
+        <option>Dr. Mishra</option>
+        <option>Dr. Prathima</option>
+      </select>
+
+      <input id="refDoctor" placeholder="Ref Doctor" style="grid-column: span 6;" />
+    </div>
+
+    <textarea id="history" placeholder="Medical History" style="margin-top: 16px;"></textarea>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="saveAppointment()">Save</button>
+      <button class="btn-secondary" onclick="location.href='add_labs.html'">
+        Cancel
+      </button>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>

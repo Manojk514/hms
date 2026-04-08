@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OP Staff Login - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="op_login.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-center">
+    <img src="itivat_logo.jpg" class="brand-logo" />
+    <h1>ITiVAT MED</h1>
+  </div>
+</header>
+
+<main class="login-wrapper">
+  <div class="login-card">
+    <h2>OP Staff Login</h2>
+
+    <form onsubmit="loginOP(event)">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <p id="error" style="color:red;"></p>
+  </div>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyAHk_3j17dq7uG-UC9fr3lIES_bcnqKjFc",
+  authDomain: "itivat-med-hms.firebaseapp.com",
+  projectId: "itivat-med-hms",
+  storageBucket: "itivat-med-hms.firebasestorage.app",
+  messagingSenderId: "690474532008",
+  appId: "1:690474532008:web:4c8c4ceca7a2042cca569d"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.loginOP = function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        window.location.href = "op_dashboard.html";
+      })
+      .catch(err => {
+        document.getElementById("error").innerText = err.message;
+      });
+  };
+</script>
+
+
+</body>
+</html>

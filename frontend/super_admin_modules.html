@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Module Configuration - ITiVAT MED Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="super_admin_dashboard.css" />
+    <link rel="stylesheet" href="super_admin_modules.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+
+      <div class="brand">
+        <h2>Module Configuration</h2>
+        <span class="super-admin-badge">Super Admin</span>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="menu" onclick="goToDashboard()">Dashboard</div>
+        <div class="menu" onclick="goToHospitals()">Hospital Management</div>
+        <div class="menu active">Module Configuration</div>
+        <div class="menu" onclick="goToUserManagement()">User Management</div>
+        <div class="menu" onclick="goToReports()">Reports & Analytics</div>
+        <div class="menu">Subscriptions</div>
+        <div class="menu">Platform Settings</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="view-header">
+          <h1>Module Configuration</h1>
+          <div class="header-actions">
+            <button class="secondary-btn" onclick="bulkConfigureModules()">Bulk Configure</button>
+            <button class="primary-btn" onclick="saveAllConfigurations()">Save All Changes</button>
+          </div>
+        </div>
+
+        <!-- HOSPITAL SELECTOR -->
+        <div class="hospital-selector">
+          <label>Select Hospital:</label>
+          <select id="hospitalSelect" onchange="loadHospitalModules()">
+            <option value="">Choose a hospital...</option>
+          </select>
+        </div>
+
+        <!-- MODULE CONFIGURATION PANEL -->
+        <div id="moduleConfigPanel" class="module-config-panel" style="display: none;">
+          <div class="hospital-info">
+            <div class="hospital-card">
+              <div class="hospital-details">
+                <h3 id="selectedHospitalName">Apollo Hospitals</h3>
+                <p id="selectedHospitalLocation">Hyderabad, Telangana</p>
+                <span id="selectedHospitalPlan" class="plan-badge premium">Premium Plan</span>
+              </div>
+              <div class="hospital-status">
+                <span id="selectedHospitalStatus" class="status active">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODULES GRID -->
+          <div class="modules-grid">
+            <!-- OP Module -->
+            <div class="module-card">
+              <div class="module-header">
+                <div class="module-icon op">🏥</div>
+                <div class="module-info">
+                  <h4>OP Module</h4>
+                  <p>Outpatient Management System</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="opModule" checked onchange="toggleModule('op')">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">✓ Patient Registration</div>
+                <div class="feature">✓ Appointment Scheduling</div>
+                <div class="feature">✓ Doctor Consultation</div>
+                <div class="feature">✓ Medical Records</div>
+              </div>
+              <div class="module-status enabled" id="opStatus">
+                <span class="status-dot"></span>
+                Module Enabled
+              </div>
+            </div>
+
+            <!-- Lab Module -->
+            <div class="module-card">
+              <div class="module-header">
+                <div class="module-icon lab">🔬</div>
+                <div class="module-info">
+                  <h4>Lab Module</h4>
+                  <p>Laboratory Management System</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="labModule" checked onchange="toggleModule('lab')">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">✓ Test Registration</div>
+                <div class="feature">✓ Sample Collection</div>
+                <div class="feature">✓ Result Entry</div>
+                <div class="feature">✓ Report Generation</div>
+              </div>
+              <div class="module-status enabled" id="labStatus">
+                <span class="status-dot"></span>
+                Module Enabled
+              </div>
+            </div>
+
+            <!-- Pharmacy Module -->
+            <div class="module-card">
+              <div class="module-header">
+                <div class="module-icon pharmacy">💊</div>
+                <div class="module-info">
+                  <h4>Pharmacy Module</h4>
+                  <p>Pharmacy & Inventory Management</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="pharmacyModule" checked onchange="toggleModule('pharmacy')">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">✓ Medicine Inventory</div>
+                <div class="feature">✓ Prescription Management</div>
+                <div class="feature">✓ Stock Tracking</div>
+                <div class="feature">✓ Supplier Management</div>
+              </div>
+              <div class="module-status enabled" id="pharmacyStatus">
+                <span class="status-dot"></span>
+                Module Enabled
+              </div>
+            </div>
+
+            <!-- Billing Module -->
+            <div class="module-card">
+              <div class="module-header">
+                <div class="module-icon billing">💰</div>
+                <div class="module-info">
+                  <h4>Billing Module</h4>
+                  <p>Financial & Billing Management</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="billingModule" checked onchange="toggleModule('billing')">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">✓ Invoice Generation</div>
+                <div class="feature">✓ Payment Processing</div>
+                <div class="feature">✓ Insurance Claims</div>
+                <div class="feature">✓ Financial Reports</div>
+              </div>
+              <div class="module-status enabled" id="billingStatus">
+                <span class="status-dot"></span>
+                Module Enabled
+              </div>
+            </div>
+
+            <!-- IPD Module (Coming Soon) -->
+            <div class="module-card disabled">
+              <div class="module-header">
+                <div class="module-icon ipd">🏨</div>
+                <div class="module-info">
+                  <h4>IPD Module</h4>
+                  <p>Inpatient Department Management</p>
+                </div>
+                <label class="toggle-switch disabled">
+                  <input type="checkbox" id="ipdModule" disabled>
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">• Bed Management</div>
+                <div class="feature">• Patient Admission</div>
+                <div class="feature">• Ward Management</div>
+                <div class="feature">• Discharge Planning</div>
+              </div>
+              <div class="module-status coming-soon">
+                <span class="status-dot"></span>
+                Coming Soon
+              </div>
+            </div>
+
+            <!-- Emergency Module (Coming Soon) -->
+            <div class="module-card disabled">
+              <div class="module-header">
+                <div class="module-icon emergency">🚨</div>
+                <div class="module-info">
+                  <h4>Emergency Module</h4>
+                  <p>Emergency Department Management</p>
+                </div>
+                <label class="toggle-switch disabled">
+                  <input type="checkbox" id="emergencyModule" disabled>
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="module-features">
+                <div class="feature">• Emergency Registration</div>
+                <div class="feature">• Triage Management</div>
+                <div class="feature">• Critical Care</div>
+                <div class="feature">• Ambulance Tracking</div>
+              </div>
+              <div class="module-status coming-soon">
+                <span class="status-dot"></span>
+                Coming Soon
+              </div>
+            </div>
+          </div>
+
+          <!-- CONFIGURATION SUMMARY -->
+          <div class="config-summary">
+            <h3>Configuration Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span class="summary-label">Enabled Modules:</span>
+                <div id="enabledModulesList" class="enabled-modules">
+                  <span style="color: #6b7280;">No modules enabled</span>
+                </div>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Monthly Cost:</span>
+                <span id="monthlyCost" class="cost">₹0</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Last Updated:</span>
+                <span id="lastUpdated">Never</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="config-actions">
+            <button class="secondary-btn" onclick="resetConfiguration()">Reset to Default</button>
+            <button class="secondary-btn" onclick="previewChanges()">Preview Changes</button>
+            <button class="primary-btn" onclick="saveConfiguration()">Save Configuration</button>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">⚙️</div>
+          <h3>Select a Hospital</h3>
+          <p>Choose a hospital from the dropdown above to configure its modules.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BULK CONFIGURATION MODAL -->
+    <div class="modal" id="bulkConfigModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Bulk Module Configuration</h3>
+          <button class="close-btn" onclick="closeBulkConfig()">&times;</button>
+        </div>
+        
+        <div class="bulk-config-content">
+          <p>Apply module configuration to multiple hospitals at once:</p>
+          
+          <div class="hospital-selection">
+            <h4>Select Hospitals:</h4>
+            <div class="hospital-checkboxes" id="bulkHospitalList">
+              <!-- Will be populated dynamically from database -->
+              <p style="color: #6b7280; padding: 10px;">Loading hospitals...</p>
+            </div>
+          </div>
+
+          <div class="module-selection">
+            <h4>Select Modules to Enable:</h4>
+            <div class="module-checkboxes">
+              <label><input type="checkbox" id="bulkOpModule" value="OP"> OP Module</label>
+              <label><input type="checkbox" id="bulkLabModule" value="LAB"> Lab Module</label>
+              <label><input type="checkbox" id="bulkPharmacyModule" value="PHARMACY"> Pharmacy Module</label>
+              <label><input type="checkbox" id="bulkBillingModule" value="BILLING"> Billing Module</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="secondary-btn" onclick="closeBulkConfig()">Cancel</button>
+          <button class="primary-btn" onclick="applyBulkConfiguration()">Apply to Selected</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="super_admin_modules.js"></script>
+    <script>
+      // Debug: Check if hospitals are loaded after 2 seconds
+      setTimeout(() => {
+        console.log('=== DEBUG CHECK ===');
+        console.log('Hospitals array:', hospitals);
+        console.log('Dropdown element:', document.getElementById('hospitalSelect'));
+        console.log('Dropdown options:', document.getElementById('hospitalSelect')?.options.length);
+      }, 2000);
+    </script>
+  </body>
+</html>

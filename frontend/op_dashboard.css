@@ -1,0 +1,416 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: #f5f7fa;
+  color: #0f172a;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 18px 40px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.logout-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-card {
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.filter-card input {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.filter-card button {
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  background: #1e4fa1;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== TABLE ===== */
+.op-table {
+  max-width: 1400px;
+  margin: 0 auto 40px;
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.op-table thead {
+  background: #f8fafc;
+}
+
+.op-table th,
+.op-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.op-table th {
+  font-weight: 700;
+}
+
+.op-table tr:hover {
+  background: #f9fafb;
+}
+
+/* ===== PAYMENT ===== */
+.payment {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.payment.Paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.payment.Pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions button {
+  margin-right: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background: #f1f5f9;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+
+/* ===== PAYMENT PILL (FINAL) ===== */
+.op-table .payment {
+  display: inline-block;
+  min-width: 70px;
+  padding: 6px 14px;
+  border-radius: 999px; /* pill shape */
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.op-table .payment.Paid {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.op-table .payment.Pending {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* center payment column */
+.op-table td.payment-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ===== HEADER GRID (FINAL) ===== */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 16px 32px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.header-center {
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* ===== PAYMENT PILL ===== */
+.payment-cell {
+  text-align: center;
+}
+
+.payment {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.payment.Paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.payment.Pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+/* TOP BAR */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+/* LEFT */
+.top-left {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.search-input,
+.date-input {
+  padding: 14px 16px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  min-width: 220px;
+}
+
+/* CENTER */
+.top-center {
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: #1e4fa1;
+  color: #ffffff;
+}
+
+.btn.excel {
+  background: #16a34a;
+  color: white;
+}
+
+/* RIGHT TABS */
+.tabs {
+  display: flex;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.tab-btn {
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+  color: #334155;
+}
+
+.tab-btn.active {
+  background: #1e4fa1;
+  color: white;
+}
+/* TAB BUTTONS */
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tab-btn {
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: none;
+  background: #e5e7eb;
+  color: #1f2937;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #1e4fa1;
+  color: #ffffff;
+}
+.op-table th,
+.op-table td,
+.lab-table th,
+.lab-table td {
+  text-align: center;
+  padding: 12px;
+  white-space: nowrap;
+}
+.op-table, .lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.op-table th,
+.op-table td,
+.lab-table th,
+.lab-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-size: 15px;
+}
+
+.op-table thead,
+.lab-table thead {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #e5e7eb;
+  font-weight: 600;
+}
+
+.tab-btn.active {
+  background: #1e4fa1;
+  color: #fff;
+}
+#appointmentsSection,
+#labsSection {
+  margin: 0 32px 40px 32px;   /* LEFT & RIGHT SPACE */
+}
+.op-table,
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden; /* keeps rounded corners */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.op-table,
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden; /* keeps rounded corners */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.op-table thead,
+.lab-table thead {
+  background: #f8fafc;
+}
+
+.op-table th,
+.lab-table th {
+  font-weight: 700;
+  color: #0f172a;
+}
+#pagination {
+  margin: 20px auto;
+  text-align: center;
+}

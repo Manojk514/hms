@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Consultation - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="patient_consultation.css" />
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <button class="back-btn" onclick="location.href='doctor_appointments.html'">← Back to Appointments</button>
+  <h1>Patient Consultation</h1>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
+<!-- PATIENT INFO BAR -->
+<section class="patient-info-bar">
+  <div class="patient-basic">
+    <h2 id="patientName">Rajesh Kumar</h2>
+    <span class="patient-meta">OP No: <strong id="opNumber">OP12345</strong> | Age: <strong id="patientAge">45</strong> | Gender: <strong id="patientGender">Male</strong></span>
+  </div>
+  <div class="appointment-info">
+    <span class="appointment-time">⏰ 09:00 AM</span>
+    <span class="status-badge in-progress">In Progress</span>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="content-wrapper">
+  
+  <!-- LEFT PANEL: PATIENT DETAILS -->
+  <aside class="left-panel">
+    
+    <!-- BASIC INFORMATION -->
+    <div class="info-card">
+      <h3>👤 Basic Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Full Name</label>
+          <div class="value" id="fullName">Rajesh Kumar</div>
+        </div>
+        <div class="info-item">
+          <label>Age</label>
+          <div class="value" id="age">45 years</div>
+        </div>
+        <div class="info-item">
+          <label>Gender</label>
+          <div class="value" id="gender">Male</div>
+        </div>
+        <div class="info-item">
+          <label>Blood Group</label>
+          <div class="value blood-group" id="bloodGroup">O+</div>
+        </div>
+        <div class="info-item">
+          <label>Phone</label>
+          <div class="value" id="phone">+91 9876543210</div>
+        </div>
+        <div class="info-item">
+          <label>Email</label>
+          <div class="value" id="email">rajesh.k@email.com</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VITALS -->
+    <div class="info-card vitals-card">
+      <h3>💓 Current Vitals</h3>
+      <div class="vitals-grid">
+        <div class="vital-item">
+          <div class="vital-icon">🩺</div>
+          <div class="vital-info">
+            <label>Blood Pressure</label>
+            <div class="vital-value">120/80 mmHg</div>
+          </div>
+        </div>
+        <div class="vital-item">
+          <div class="vital-icon">🌡️</div>
+          <div class="vital-info">
+            <label>Temperature</label>
+            <div class="vital-value">98.6°F</div>
+          </div>
+        </div>
+        <div class="vital-item">
+          <div class="vital-icon">❤️</div>
+          <div class="vital-info">
+            <label>Pulse Rate</label>
+            <div class="vital-value">72 bpm</div>
+          </div>
+        </div>
+        <div class="vital-item">
+          <div class="vital-icon">⚖️</div>
+          <div class="vital-info">
+            <label>Weight</label>
+            <div class="vital-value">75 kg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICAL HISTORY -->
+    <div class="info-card medical-history-card">
+      <h3>📋 Medical History</h3>
+      
+      <div class="history-section">
+        <h4 class="history-header">Previous Consultations</h4>
+        <div class="history-timeline" id="previousVisits">
+          <!-- Timeline items will be loaded here -->
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">15 Jan 2026</div>
+              <div class="timeline-diagnosis">Hypertension</div>
+              <div class="timeline-meta">
+                <span class="timeline-doctor">👨‍⚕️ Dr. Sharma</span>
+                <span class="timeline-prescriptions">💊 2 medicines</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">10 Dec 2025</div>
+              <div class="timeline-diagnosis">Regular Checkup</div>
+              <div class="timeline-meta">
+                <span class="timeline-doctor">👨‍⚕️ Dr. Patel</span>
+                <span class="timeline-prescriptions">💊 1 medicine</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">05 Nov 2025</div>
+              <div class="timeline-diagnosis">Chest Pain Evaluation</div>
+              <div class="timeline-meta">
+                <span class="timeline-doctor">👨‍⚕️ Dr. Sharma</span>
+                <span class="timeline-prescriptions">💊 3 medicines</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-section">
+        <h4 class="history-header">Recent Prescriptions</h4>
+        <div class="prescription-cards" id="previousPrescriptions">
+          <div class="prescription-card" onclick="viewPrescriptionDetails('PRESC001')">
+            <div class="prescription-header">
+              <span class="prescription-date">📅 15 Jan 2026</span>
+              <span class="prescription-badge">2 medicines</span>
+            </div>
+            <div class="prescription-medicines">
+              <div class="medicine-line">• Amlodipine 5mg - Once daily</div>
+              <div class="medicine-line">• Aspirin 75mg - Once daily</div>
+            </div>
+            <div class="prescription-footer">
+              <span class="view-details-link">👁️ View Full Details</span>
+            </div>
+          </div>
+          
+          <div class="prescription-card" onclick="viewPrescriptionDetails('PRESC002')">
+            <div class="prescription-header">
+              <span class="prescription-date">📅 10 Dec 2025</span>
+              <span class="prescription-badge">1 medicine</span>
+            </div>
+            <div class="prescription-medicines">
+              <div class="medicine-line">• Multivitamin - Once daily</div>
+            </div>
+            <div class="prescription-footer">
+              <span class="view-details-link">👁️ View Full Details</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT PANEL: CONSULTATION FORM -->
+  <main class="right-panel">
+    
+    <!-- CHIEF COMPLAINT -->
+    <div class="consultation-card">
+      <h3>Chief Complaint</h3>
+      <div class="complaint-box">
+        <p id="chiefComplaint">Chest pain and breathing difficulty</p>
+      </div>
+    </div>
+
+    <!-- PRESCRIPTION WORKFLOW -->
+    <div class="consultation-card prescription-workflow">
+      <h3 class="section-title">📋 Prescription Workflow</h3>
+      
+      <!-- 1. DIAGNOSIS SECTION -->
+      <div class="prescription-section">
+        <h4 class="subsection-title">1. Diagnosis</h4>
+        <div class="form-group">
+          <label>Primary Diagnosis *</label>
+          <textarea id="primaryDiagnosis" rows="3" placeholder="Enter primary diagnosis..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Secondary Notes</label>
+          <textarea id="secondaryNotes" rows="2" placeholder="Additional diagnostic notes or observations..."></textarea>
+        </div>
+      </div>
+
+      <!-- 2. SYMPTOMS SECTION -->
+      <div class="prescription-section">
+        <h4 class="subsection-title">2. Symptoms</h4>
+        <div class="symptoms-container" id="symptomsContainer">
+          <div class="symptom-tag">Chest Pain <button onclick="removeSymptom(this)">×</button></div>
+          <div class="symptom-tag">Shortness of Breath <button onclick="removeSymptom(this)">×</button></div>
+        </div>
+        <div class="add-symptom-form">
+          <input type="text" id="symptomInput" placeholder="Enter symptom..." />
+          <button class="btn-add-symptom" onclick="addSymptom()">+ Add Symptom</button>
+        </div>
+      </div>
+
+      <!-- 3. MEDICINES SECTION -->
+      <div class="prescription-section">
+        <h4 class="subsection-title">3. Medicines</h4>
+        <div class="medicines-container" id="medicinesContainer">
+          <!-- Medicine rows will be added here -->
+        </div>
+        <button class="btn-add-medicine" onclick="addMedicineRow()">+ Add Medicine</button>
+      </div>
+
+      <!-- 4. ADDITIONAL NOTES -->
+      <div class="prescription-section">
+        <h4 class="subsection-title">4. Additional Instructions</h4>
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea id="additionalNotes" rows="3" placeholder="Any additional instructions for the patient..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB ORDERS -->
+    <div class="consultation-card">
+      <h3>Lab Orders</h3>
+      
+      <div class="lab-order-form">
+        <div class="form-row">
+          <select id="labTestSelect" class="lab-select">
+            <option value="">Select Lab Test</option>
+            <option value="CBC">Complete Blood Count (CBC)</option>
+            <option value="Lipid">Lipid Profile</option>
+            <option value="Glucose">Blood Glucose (Fasting)</option>
+            <option value="HbA1c">HbA1c</option>
+            <option value="Thyroid">Thyroid Function Test</option>
+            <option value="LFT">Liver Function Test (LFT)</option>
+            <option value="KFT">Kidney Function Test (KFT)</option>
+            <option value="ECG">ECG</option>
+            <option value="Xray">Chest X-Ray</option>
+            <option value="Echo">Echocardiogram</option>
+            <option value="Urine">Urine Routine</option>
+            <option value="ESR">ESR</option>
+          </select>
+          <button class="btn-add" onclick="addLabTest()">+ Add Test</button>
+        </div>
+        
+        <div class="lab-tests-list" id="labTestsList">
+          <!-- Lab tests will be added here -->
+        </div>
+        
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Lab Notes</label>
+          <textarea id="labNotes" rows="2" placeholder="Add any special instructions for lab tests..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOLLOW-UP SCHEDULING -->
+    <div class="consultation-card">
+      <h3>Follow-up Scheduling</h3>
+      
+      <div class="followup-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Follow-up Date *</label>
+            <input type="date" id="followupDate" min="" />
+          </div>
+          <div class="form-group">
+            <label>Follow-up Time</label>
+            <input type="time" id="followupTime" value="09:00" />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Follow-up Remarks</label>
+          <textarea id="followupRemarks" rows="2" placeholder="Reason for follow-up, what to monitor, etc..."></textarea>
+        </div>
+        
+        <button class="btn-schedule" onclick="scheduleFollowup()">📅 Schedule Follow-up</button>
+      </div>
+      
+      <div class="scheduled-followups" id="scheduledFollowups">
+        <!-- Scheduled follow-ups will appear here -->
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-buttons">
+      <button class="btn-secondary" onclick="saveDraft()">💾 Save as Draft</button>
+      <button class="btn-print" onclick="printAndComplete()">🖨️ Print & Complete</button>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- PRESCRIPTION DETAILS MODAL -->
+<div class="modal" id="prescriptionModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📋 Prescription Details</h3>
+      <button class="close-btn" onclick="closePrescriptionModal()">&times;</button>
+    </div>
+    
+    <div class="modal-body" id="prescriptionModalBody">
+      <!-- Prescription details will be loaded here -->
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closePrescriptionModal()">Close</button>
+      <button class="btn-primary" onclick="printPrescription()">🖨️ Print</button>
+    </div>
+  </div>
+</div>
+
+<script src="patient_consultation.js"></script>
+
+</body>
+</html>

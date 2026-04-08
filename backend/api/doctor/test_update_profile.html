@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Update Doctor Profile API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .required {
+            color: #dc2626;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-update {
+            background: #667eea;
+            color: white;
+        }
+        .btn-update:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-load {
+            background: #10b981;
+            color: white;
+        }
+        .btn-load:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        .btn-reset {
+            background: #6b7280;
+            color: white;
+        }
+        .btn-reset:hover {
+            background: #4b5563;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+        }
+        .info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+        .result h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🩺 Update Doctor Profile API</h1>
+        <p class="subtitle">Test the update profile endpoint with real-time validation</p>
+        
+        <form id="updateForm">
+            <div class="form-group">
+                <label for="doctor_code">Doctor Code <span class="required">*</span></label>
+                <input type="text" id="doctor_code" placeholder="e.g., DOC001" required>
+            </div>
+
+            <div class="grid">
+                <div class="form-group">
+                    <label for="doctor_name">Doctor Name</label>
+                    <input type="text" id="doctor_name" placeholder="e.g., Dr. John Smith">
+                </div>
+
+                <div class="form-group">
+                    <label for="qualification">Qualification</label>
+                    <input type="text" id="qualification" placeholder="e.g., MBBS, MD">
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="form-group">
+                    <label for="experience">Experience (years)</label>
+                    <input type="number" id="experience" placeholder="e.g., 10" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="license_number">License Number</label>
+                    <input type="text" id="license_number" placeholder="e.g., MED12345">
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="e.g., doctor@hospital.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" placeholder="e.g., 9876543210">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" placeholder="Enter full address"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-load" onclick="loadProfile()">📥 Load Current Profile</button>
+                <button type="submit" class="btn-update">💾 Update Profile</button>
+                <button type="reset" class="btn-reset">🔄 Reset Form</button>
+            </div>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('updateForm');
+        const resultDiv = document.getElementById('result');
+
+        // Load current profile
+        async function loadProfile() {
+            const doctorCode = document.getElementById('doctor_code').value.trim();
+            
+            if (!doctorCode) {
+                showResult('error', 'Please enter a doctor code first');
+                return;
+            }
+
+            showResult('info', 'Loading profile...');
+
+            try {
+                const response = await fetch(`get_profile.php?doctor_code=${encodeURIComponent(doctorCode)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const doctor = data.data;
+                    document.getElementById('doctor_name').value = doctor.doctor_name || '';
+                    document.getElementById('qualification').value = doctor.qualification || '';
+                    document.getElementById('experience').value = doctor.experience || '';
+                    document.getElementById('license_number').value = doctor.license_number || '';
+                    document.getElementById('email').value = doctor.email || '';
+                    document.getElementById('phone').value = doctor.phone || '';
+                    document.getElementById('address').value = doctor.address || '';
+
+                    showResult('success', '✅ Profile loaded successfully', data);
+                } else {
+                    showResult('error', data.error.message, data);
+                }
+            } catch (error) {
+                showResult('error', 'Failed to load profile: ' + error.message);
+            }
+        }
+
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const doctorCode = document.getElementById('doctor_code').value.trim();
+
+            if (!doctorCode) {
+                showResult('error', 'Doctor code is required');
+                return;
+            }
+
+            // Build update data (only include non-empty fields)
+            const updateData = {
+                doctor_code: doctorCode
+            };
+
+            const fields = ['doctor_name', 'qualification', 'experience', 'license_number', 'email', 'phone', 'address'];
+            
+            fields.forEach(field => {
+                const value = document.getElementById(field).value.trim();
+                if (value !== '') {
+                    updateData[field] = field === 'experience' ? parseInt(value) : value;
+                }
+            });
+
+            // Check if at least one field is being updated
+            if (Object.keys(updateData).length === 1) {
+                showResult('error', 'Please fill at least one field to update');
+                return;
+            }
+
+            showResult('info', 'Updating profile...');
+
+            try {
+                const response = await fetch('update_profile.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    showResult('success', '✅ ' + data.message, data);
+                } else {
+                    showResult('error', '❌ ' + data.message, data);
+                }
+
+            } catch (error) {
+                showResult('error', 'Network error: ' + error.message);
+            }
+        });
+
+        // Show result
+        function showResult(type, message, data = null) {
+            let html = `<div class="result ${type}">
+                <h3>${message}</h3>`;
+            
+            if (data) {
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+
+        // Reset result on form reset
+        form.addEventListener('reset', () => {
+            resultDiv.innerHTML = '';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Appointments Analytics - Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="admin_appointments.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button onclick="history.back()">← Back</button>
+      <h1>ITiVAT MED - Test Mode</h1>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <input type="date" id="fromDate" />
+      <input type="date" id="toDate" />
+      <select id="doctorFilter">
+        <option value="All">All Doctors</option>
+        <option value="Dr. Smith">Dr. Smith</option>
+        <option value="Dr. Johnson">Dr. Johnson</option>
+      </select>
+      <button onclick="loadTestData()">Apply</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="card">
+        <p>Total Appointments</p>
+        <h2 id="totalAppointments">15</h2>
+      </div>
+      <div class="card">
+        <p>Total Labs</p>
+        <h2 id="totalLabs">8</h2>
+      </div>
+      <div class="card">
+        <p>Total Patients</p>
+        <h2 id="totalPatients">20</h2>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Appointments Distribution</h3>
+        <canvas id="pieChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-header">
+          <h3>Doctor Workload</h3>
+          <button onclick="alert('Test mode - Modal disabled')">View More</button>
+        </div>
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <!-- TABLE CONTROLS -->
+    <div class="table-controls">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('appointments')">
+          Appointments
+        </button>
+        <button class="tab" onclick="switchTab('labs')">Labs</button>
+      </div>
+
+      <input
+        id="searchInput"
+        placeholder="Search OP / Phone / Name"
+        oninput="applySearch()"
+      />
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Doctor</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td>1</td>
+            <td>OP001</td>
+            <td>John Doe</td>
+            <td>+91 9876543210</td>
+            <td>Dr. Smith</td>
+            <td>2026-02-02</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>OP002</td>
+            <td>Jane Smith</td>
+            <td>+91 9876543211</td>
+            <td>Dr. Johnson</td>
+            <td>2026-02-02</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button onclick="prevPage()">Prev</button>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button onclick="nextPage()">Next</button>
+      </div>
+    </div>
+
+    <script>
+      // Set today's date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('fromDate').value = today;
+      document.getElementById('toDate').value = today;
+
+      // Initialize charts
+      function loadTestData() {
+        // Pie Chart
+        const pieCtx = document.getElementById('pieChart');
+        new Chart(pieCtx, {
+          type: 'pie',
+          data: {
+            labels: ['Appointments', 'Labs'],
+            datasets: [{
+              data: [15, 8],
+              backgroundColor: ['#1e4fa1', '#f97316']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+
+        // Bar Chart
+        const barCtx = document.getElementById('barChart');
+        new Chart(barCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Dr. Smith', 'Dr. Johnson', 'Dr. Brown'],
+            datasets: [{
+              label: 'Appointments',
+              data: [8, 5, 2],
+              backgroundColor: '#1e4fa1'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }
+
+      // Load test data on page load
+      window.onload = loadTestData;
+
+      function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+      }
+
+      function applySearch() {
+        // Test search functionality
+        console.log('Search:', document.getElementById('searchInput').value);
+      }
+
+      function nextPage() {
+        console.log('Next page');
+      }
+
+      function prevPage() {
+        console.log('Previous page');
+      }
+    </script>
+  </body>
+</html>

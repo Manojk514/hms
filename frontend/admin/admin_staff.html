@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Staff Management - ITiVAT MED</title>
+    <link rel="stylesheet" href="admin_dashboard.css" />
+
+    <style>
+      .summary-boxes {
+        display: flex;
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .summary-card {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+        width: 260px;
+      }
+
+      .staff-section {
+        background: white;
+        padding: 20px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .add-staff-btn {
+        background: #1e4fa1;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .add-staff-btn:hover {
+        transform: translateY(-1px);
+        opacity: 0.9;
+      }
+
+      .staff-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .staff-card {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 12px;
+      }
+
+      .staff-card h4 {
+        margin: 0 0 5px 0;
+        color: #1e4fa1;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        width: 420px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-content input {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #cbd5f5;
+      }
+
+      .save-btn {
+        background: #16a34a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <button
+        class="back-btn"
+        onclick="window.location.href = 'admin_dashboard.html'"
+      >
+        ← Back
+      </button>
+      <div class="brand"><h2>ITiVAT MED</h2></div>
+    </div>
+
+    <div class="content">
+      <h1 class="dashboard-title">Staff Management</h1>
+
+      <!-- SUMMARY -->
+      <div class="summary-boxes">
+        <div class="summary-card">
+          <h4>Total Staff</h4>
+          <h3 id="totalStaff">0</h3>
+        </div>
+
+        <div class="summary-card">
+          <h4>Total Salary Expense</h4>
+          <h3 id="totalSalary">₹0</h3>
+        </div>
+      </div>
+
+      <!-- RECEPTIONISTS -->
+      <div class="staff-section">
+        <div class="section-header">
+          <h3>Receptionists</h3>
+          <button class="add-staff-btn" onclick="openModal('Receptionist')">
+            + Add Receptionist
+          </button>
+        </div>
+        <div class="staff-grid" id="Receptionist"></div>
+      </div>
+
+      <!-- NURSES -->
+      <div class="staff-section">
+        <div class="section-header">
+          <h3>Nurses</h3>
+          <button class="add-staff-btn" onclick="openModal('Nurse')">
+            + Add Nurse
+          </button>
+        </div>
+        <div class="staff-grid" id="Nurse"></div>
+      </div>
+
+      <!-- JANITORS -->
+      <div class="staff-section">
+        <div class="section-header">
+          <h3>Janitors</h3>
+          <button class="add-staff-btn" onclick="openModal('Janitor')">
+            + Add Janitor
+          </button>
+        </div>
+        <div class="staff-grid" id="Janitor"></div>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="staffModal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add Staff</h3>
+
+        <input id="staffName" placeholder="Name" />
+        <input id="staffPhone" placeholder="Phone Number" />
+        <input id="staffAadhar" type="file" />
+        <input id="staffPan" type="file" />
+        <input id="staffDocuments" type="file" />
+        <input id="staffSalary" placeholder="Salary" />
+
+        <button class="save-btn" onclick="saveStaff()">Save</button>
+      </div>
+    </div>
+
+    <script type="module" src="admin_staff.js"></script>
+  </body>
+</html>

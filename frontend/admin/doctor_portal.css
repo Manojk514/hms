@@ -1,0 +1,137 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(rgba(30, 60, 114, 0.7), rgba(30, 60, 114, 0.7)),
+    url("doctor-bg.jpg") center/cover no-repeat;
+  color: #ffffff;
+}
+
+/* HEADER */
+.top-header {
+  padding: 25px;
+  text-align: center;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.header-brand img {
+  height: 55px;
+}
+
+.top-header h1 {
+  margin: 0;
+  font-size: 32px; /* bigger */
+  font-weight: 800;
+}
+
+/* MAIN LAYOUT */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 140px;
+  min-height: calc(100vh - 240px);
+}
+
+/* QUOTE */
+.quote-section {
+  max-width: 45%;
+}
+
+.quote-text {
+  font-size: 30px; /* bigger */
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* DOTS */
+.quote-dots {
+  margin-top: 24px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.dot.active {
+  background: #ffffff;
+}
+
+/* LOGIN CARD */
+.login-card {
+  background: #ffffff;
+  color: #0f172a;
+  width: 460px;
+  padding: 45px;
+  border-radius: 26px;
+  box-shadow: 0 28px 55px rgba(0, 0, 0, 0.3);
+}
+
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.login-card label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 14px;
+  background: #1e4fa1;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.login-card button:hover {
+  background: #163d80;
+}
+
+/* FOOTER */
+.footer {
+  background: #0f172a;
+  color: #cbd5e1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 30px 60px;
+  font-size: 14px;
+}
+
+.footer strong {
+  color: #ffffff;
+  font-size: 15px;
+}

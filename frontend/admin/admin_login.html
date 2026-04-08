@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      if (localStorage.getItem("adminLoggedIn") !== "true") {
+        window.location.href = "admin_login.html";
+      }
+    </script>
+
+    <meta charset="UTF-8" />
+    <title>Admin Login – ITIVAT MED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="admin_login.css" />
+  </head>
+  <body>
+    <!-- TOP HEADER -->
+    <header class="header">
+      <img src="itivat_logo.jpg" alt="ITIVAT MED Logo" />
+      <h1>ITIVAT MED</h1>
+    </header>
+
+    <!-- LOGIN CARD -->
+    <main class="login-wrapper">
+      <div class="login-card">
+        <h2>Admin Login</h2>
+
+        <input type="email" id="email" placeholder="Email" autocomplete="off" />
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          autocomplete="off"
+        />
+
+        <p id="error" class="error"></p>
+
+        <button onclick="loginAdmin()">Login</button>
+      </div>
+    </main>
+
+    <script src="admin_login.js"></script>
+  </body>
+</html>

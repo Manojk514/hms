@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Database Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+        }
+        .success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2;
+            border-left-color: #dc2626;
+            color: #991b1b;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Database Connection Test</h1>
+        
+        <h3>Step 1: Check Database Connection</h3>
+        <button onclick="window.open('test_database_connection.php', '_blank')">
+            🔗 Test Database Connection
+        </button>
+        
+        <h3>Step 2: Test Update with Debug</h3>
+        <button onclick="testUpdateWithDebug()">
+            🐛 Debug Update API
+        </button>
+        
+        <h3>Step 3: Test Actual Update API</h3>
+        <button onclick="testActualUpdate()">
+            💾 Test Real Update
+        </button>
+        
+        <h3>Step 4: Verify in Database</h3>
+        <button onclick="verifyDatabase()">
+            ✓ Verify Changes
+        </button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+
+        async function testUpdateWithDebug() {
+            resultDiv.innerHTML = '<div class="result">Testing with debug...</div>';
+            
+            const testData = {
+                doctor_code: 'DOC001',
+                doctor_name: 'Dr. Debug Test ' + new Date().toLocaleTimeString(),
+                qualification: 'MBBS, MD, Debug',
+                experience: 99
+            };
+
+            try {
+                const response = await fetch('debug_update.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const html = await response.text();
+                
+                // Open in new window
+                const win = window.open('', '_blank');
+                win.document.write(html);
+                win.document.close();
+                
+                resultDiv.innerHTML = '<div class="result success">✅ Debug window opened. Check the new tab for details.</div>';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testActualUpdate() {
+            resultDiv.innerHTML = '<div class="result">Testing actual update API...</div>';
+            
+            const testData = {
+                doctor_code: 'DOC001',
+                doctor_name: 'Dr. Real Test ' + new Date().toLocaleTimeString(),
+                qualification: 'MBBS, MD, Real Update',
+                experience: 88
+            };
+
+            try {
+                const response = await fetch('update_profile.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Update Successful!</h3>
+                            <p>${data.message}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Update Failed</h3>
+                            <p>${data.message}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+
+        async function verifyDatabase() {
+            resultDiv.innerHTML = '<div class="result">Fetching current data...</div>';
+            
+            try {
+                const response = await fetch('get_profile.php?doctor_code=DOC001');
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Current Database Data</h3>
+                            <pre>${JSON.stringify(data.data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Failed to fetch data</h3>
+                            <p>${data.error?.message || 'Unknown error'}</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            resultDiv.innerHTML = `
+                <div class="result">
+                    <h3>📋 Instructions:</h3>
+                    <ol>
+                        <li>Click "Test Database Connection" to verify database is accessible</li>
+                        <li>Click "Debug Update API" to see detailed execution steps</li>
+                        <li>Click "Test Real Update" to test the actual API</li>
+                        <li>Click "Verify Changes" to see current database values</li>
+                    </ol>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

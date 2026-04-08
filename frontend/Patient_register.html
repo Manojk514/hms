@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Patient Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="patient_register.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <!-- BACK BUTTON -->
+      <button
+        class="back-btn"
+        onclick="window.location.href='patient_portal.html'"
+      >
+        ← Back
+      </button>
+
+      <!-- BRAND -->
+      <div class="header-brand">
+        <img src="itivat_logo.jpg" alt="ITiVAT Logo" class="brand-logo" />
+        <div>
+          <h1>ITiVAT MED</h1>
+          <p>New Patient Registration</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- REGISTRATION FORM -->
+    <section class="register-container">
+      <!-- PERSONAL INFORMATION -->
+      <div class="card">
+        <h2>Personal Information</h2>
+
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter full name" />
+
+        <label>Phone Number</label>
+        <input type="tel" placeholder="Enter phone number" />
+
+        <label>Email Address</label>
+        <input type="email" placeholder="Enter email address" />
+
+        <label>Address</label>
+        <textarea placeholder="Enter address"></textarea>
+
+        <div class="row">
+          <div>
+            <label>Age</label>
+            <input type="number" placeholder="Age" />
+          </div>
+          <div>
+            <label>Height (cm)</label>
+            <input type="number" placeholder="Height" />
+          </div>
+          <div>
+            <label>Weight (kg)</label>
+            <input type="number" placeholder="Weight" />
+          </div>
+        </div>
+      </div>
+
+      <!-- GUARDIAN DETAILS -->
+      <div class="card">
+        <h2>Guardian Details</h2>
+
+        <label>Guardian Name</label>
+        <input type="text" placeholder="Guardian name" />
+
+        <label>Guardian Phone Number</label>
+        <input type="tel" placeholder="Guardian phone number" />
+
+        <label>Guardian Address</label>
+        <textarea placeholder="Guardian address"></textarea>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+        <button id="submitBtn">Register</button>
+        <p>
+          Already registered?
+          <a href="patient_portal.html">Back to Login</a>
+        </p>
+      </div>
+    </section>
+
+    <script src="patient_register.js"></script>
+  </body>
+</html>

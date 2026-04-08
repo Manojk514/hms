@@ -1,0 +1,32 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect to HTTPS (production only)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+    
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    
+    # Serve index.html for root directory access
+    RewriteCond %{REQUEST_URI} ^/?$
+    RewriteRule ^$ index.html [L]
+    
+    # Redirect all other requests to index.php (API router)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Set DirectoryIndex
+DirectoryIndex index.html index.php
+
+# Disable directory browsing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

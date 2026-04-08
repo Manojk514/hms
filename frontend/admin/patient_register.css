@@ -1,0 +1,143 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(#f7f9fc, #eef2f7);
+  color: #0f172a;
+}
+
+/* HEADER */
+.header {
+  position: relative;
+  padding: 30px;
+  text-align: center;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 30px;
+  top: 30px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* BRAND */
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.brand-logo {
+  height: 55px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px; /* ✅ bigger */
+  font-weight: 800;
+}
+
+.header p {
+  margin-top: 6px;
+  font-size: 16px;
+  color: #64748b;
+}
+
+/* CONTAINER */
+.register-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* FORM ELEMENTS */
+label {
+  display: block;
+  margin-top: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+}
+
+textarea {
+  resize: none;
+  height: 90px;
+}
+
+/* ROW */
+.row {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.row div {
+  flex: 1;
+}
+
+/* ACTIONS */
+.actions {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.actions button {
+  background: #1e4fa1;
+  color: #ffffff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.actions button:hover {
+  background: #163c7a;
+}
+
+.actions p {
+  margin-top: 14px;
+  font-size: 15px;
+}
+
+.actions a {
+  color: #1e4fa1;
+  text-decoration: none;
+  font-weight: 600;
+}

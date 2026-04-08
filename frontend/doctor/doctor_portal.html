@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Doctor Login | ITiVAT MED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="doctor_portal.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-brand">
+        <img src="../itivat_logo.jpg" alt="ITiVAT MED Logo" />
+        <h1>ITiVAT MED</h1>
+      </div>
+    </header>
+
+    <!-- MAIN SECTION -->
+    <section class="main-container">
+      <!-- LEFT QUOTE SECTION -->
+      <div class="quote-section">
+        <p class="quote-text">
+          “Wherever the art of Medicine is loved, there is also a love of
+          Humanity.”
+        </p>
+
+        <div class="quote-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+
+      <!-- RIGHT LOGIN CARD -->
+      <div class="login-card">
+        <h2>Doctor Login</h2>
+
+        <label>Email or Doctor Code</label>
+        <input type="text" id="doctorId" placeholder="Enter email or doctor code" />
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password" />
+
+        <button id="loginBtn">LOGIN</button>
+        
+        <!-- Error message display -->
+        <div id="errorMessage" style="display: none; margin-top: 15px; padding: 10px; background: #fee2e2; color: #991b1b; border-radius: 5px; font-size: 14px;"></div>
+        
+        <!-- Success message display -->
+        <div id="successMessage" style="display: none; margin-top: 15px; padding: 10px; background: #d1fae5; color: #065f46; border-radius: 5px; font-size: 14px;"></div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>
+        <strong>ITiVAT MED</strong>
+        <p>Advanced healthcare with compassion.</p>
+      </div>
+
+      <div>
+        <strong>Support</strong>
+        <p>Emergency: 102</p>
+        <p>Ambulance: 108</p>
+      </div>
+
+      <div>
+        <strong>Contact</strong>
+        <p>📞 +91 8688335508</p>
+        <p>📍 Hyderabad, India</p>
+        <p>📧 company support : admin@itivat.com</p>
+      </div>
+    </footer>
+
+    <script>
+      // API Configuration
+      const API_BASE_URL = 'http://localhost/HMS/backend/api/doctor';
+      
+      console.log('🚀 Doctor Login Page Loaded');
+      
+      // Helper functions for messages
+      function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        const successDiv = document.getElementById('successMessage');
+        
+        successDiv.style.display = 'none';
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        
+        console.error('❌ Error:', message);
+      }
+      
+      function showSuccess(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        const successDiv = document.getElementById('successMessage');
+        
+        errorDiv.style.display = 'none';
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        
+        console.log('✅ Success:', message);
+      }
+      
+      function hideMessages() {
+        document.getElementById('errorMessage').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'none';
+      }
+      
+      // Login function using real API
+      async function doLogin() {
+        const doctorId = document.getElementById('doctorId').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        hideMessages();
+        
+        if (!doctorId || !password) {
+          showError('Please enter both Email/Doctor Code and Password');
+          return;
+        }
+        
+        console.log('🔐 Attempting login for:', doctorId);
+        
+        try {
+          // Show loading state
+          const loginBtn = document.getElementById('loginBtn');
+          const originalText = loginBtn.textContent;
+          loginBtn.textContent = 'LOGGING IN...';
+          loginBtn.disabled = true;
+          
+          // Call login API
+          const response = await fetch(`${API_BASE_URL}/login.php`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              email_or_code: doctorId,
+              password: password
+            })
+          });
+          
+          console.log('📥 Response status:', response.status);
+          console.log('📥 Response headers:', response.headers);
+          
+          // Try to parse JSON response
+          let result;
+          try {
+            result = await response.json();
+            console.log('📥 API Response:', result);
+          } catch (jsonError) {
+            console.error('❌ Failed to parse JSON:', jsonError);
+            const text = await response.text();
+            console.error('❌ Response text:', text);
+            throw new Error('Server returned invalid JSON. Check PHP errors.');
+          }
+          
+          if (result.success) {
+            // Store doctor info in localStorage
+            localStorage.setItem('doctorCode', result.data.doctor_code);
+            localStorage.setItem('doctorName', result.data.doctor_name);
+            localStorage.setItem('doctorId', result.data.doctor_code);
+            
+            showSuccess('Login successful! Redirecting to dashboard...');
+            console.log('✅ Login successful, redirecting...');
+            
+            // Redirect to dashboard after 1 second
+            setTimeout(() => {
+              window.location.href = 'doctor_dashboard.html';
+            }, 1000);
+          } else {
+            // Login failed
+            loginBtn.textContent = originalText;
+            loginBtn.disabled = false;
+            
+            showError(result.message || 'Login failed. Please check your credentials.');
+            console.error('❌ Login failed:', result.message);
+          }
+          
+        } catch (error) {
+          console.error('❌ Login error:', error);
+          
+          const loginBtn = document.getElementById('loginBtn');
+          loginBtn.textContent = 'LOGIN';
+          loginBtn.disabled = false;
+          
+          showError('Connection error: ' + error.message + '\n\nPlease check if XAMPP is running.');
+        }
+      }
+
+      // Attach event listeners when page loads
+      window.onload = function() {
+        document.getElementById('loginBtn').onclick = doLogin;
+        
+        document.getElementById('password').onkeypress = function(e) {
+          if (e.key === 'Enter') doLogin();
+        };
+        
+        document.getElementById('doctorId').onkeypress = function(e) {
+          if (e.key === 'Enter') doLogin();
+        };
+        
+        console.log('✅ Event listeners attached');
+        console.log('✅ API Base URL:', API_BASE_URL);
+      };
+    </script>
+    <script src="doctor.js"></script>
+  </body>
+</html>

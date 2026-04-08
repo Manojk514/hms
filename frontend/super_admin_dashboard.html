@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Super Admin Dashboard - ITiVAT MED Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="super_admin_dashboard.css" />
+  </head>
+
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+
+      <div class="brand">
+        <h2>ITiVAT MED Platform</h2>
+        <span class="super-admin-badge">Super Admin</span>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="menu active" onclick="showDashboard()">Dashboard</div>
+        <div class="menu" onclick="showHospitals()">Hospital Management</div>
+        <div class="menu" onclick="showModuleConfig()">Module Configuration</div>
+        <div class="menu" onclick="showUserManagement()">User Management</div>
+        <div class="menu" onclick="showReports()">Reports & Analytics</div>
+        <div class="menu" onclick="showSubscriptions()">Subscriptions</div>
+        <div class="menu" onclick="showSettings()">Platform Settings</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView" class="view">
+          <h1 class="dashboard-title">Platform Overview</h1>
+
+          <!-- STATS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Hospitals</h4>
+              <h3 id="totalHospitals">0</h3>
+              <div class="sub-text" id="hospitalBreakdown">Loading...</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Hospitals</h4>
+              <h3 id="activeHospitals">0</h3>
+              <div class="sub-text" id="platformUsage">Loading...</div>
+            </div>
+
+            <div class="card">
+              <h4>Monthly Revenue</h4>
+              <h3 id="monthlyRevenue">₹0</h3>
+              <div class="sub-text" id="revenueBreakdown">Loading...</div>
+            </div>
+          </div>
+
+          <!-- HOSPITAL STATS TABLE -->
+          <div class="section-header">
+            <h2>Hospital-wise Statistics</h2>
+            <button class="excel-btn" onclick="downloadHospitalStats()">Export Excel</button>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Code</th>
+                  <th>Hospital Name</th>
+                  <th>Location</th>
+                  <th>Enabled Modules</th>
+                  <th>Monthly Revenue</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitalStatsBody">
+                <!-- Dynamic content will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RECENT ACTIVITIES -->
+          <div class="section-header">
+            <h2>Recent Activities</h2>
+          </div>
+
+          <div class="activities-box" id="recentActivitiesContainer">
+            <!-- Dynamic content will be loaded here -->
+          </div>
+
+          <!-- PLATFORM ACTIVITY SUMMARY -->
+          <div class="section-header">
+            <h2>Platform Activity Summary</h2>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Today</th>
+                  <th>This Week</th>
+                  <th>This Month</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="activitySummaryBody">
+                <tr>
+                  <td><strong>Hospitals Created</strong></td>
+                  <td id="hospitalsToday">-</td>
+                  <td id="hospitalsWeek">-</td>
+                  <td id="hospitalsMonth">-</td>
+                  <td id="hospitalsTotal">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Subscriptions Active</strong></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td id="subscriptionsTotal">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Revenue Generated</strong></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td id="revenueTotal">₹0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- HOSPITAL MANAGEMENT VIEW -->
+        <div id="hospitalView" class="view">
+          <div class="view-header">
+            <h1>Hospital Management</h1>
+            <button class="primary-btn" onclick="showCreateHospital()">+ Add New Hospital</button>
+          </div>
+
+          <!-- FILTERS -->
+          <div class="filters">
+            <input type="text" id="hospitalSearch" placeholder="Search by Hospital Name or Code" oninput="applyHospitalFilters()" />
+            <select id="statusFilter" onchange="applyHospitalFilters()">
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            <select id="planFilter" onchange="applyHospitalFilters()">
+              <option value="all">All Plans</option>
+              <option value="basic">Basic</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+
+          <!-- HOSPITALS TABLE -->
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Code</th>
+                  <th>Hospital Name</th>
+                  <th>City</th>
+                  <th>Subscription Plan</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitalsTableBody">
+                <!-- Dynamic content will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="hospitalPagination">
+            <button onclick="prevHospitalPage()">Prev</button>
+            <span id="hospitalPageInfo">Page 1 of 3</span>
+            <button onclick="nextHospitalPage()">Next</button>
+          </div>
+        </div>
+
+        <!-- USER MANAGEMENT VIEW -->
+        <div id="userManagementView" class="view">
+          <div class="view-header">
+            <h1>User Management</h1>
+            <button class="primary-btn" onclick="showAddUser()">+ Add New User</button>
+          </div>
+
+          <!-- USER ROLE STATISTICS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Users</h4>
+              <h3 id="totalUsers">247</h3>
+              <div class="sub-text">Across all hospitals</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Users</h4>
+              <h3 id="activeUsers">231</h3>
+              <div class="sub-text">94% Active Rate</div>
+            </div>
+
+            <div class="card">
+              <h4>New This Month</h4>
+              <h3 id="newUsers">18</h3>
+              <div class="sub-text">+12% growth</div>
+            </div>
+
+            <div class="card">
+              <h4>Pending Approvals</h4>
+              <h3 id="pendingUsers">5</h3>
+              <div class="sub-text">Require approval</div>
+            </div>
+          </div>
+
+          <!-- USER ROLES OVERVIEW -->
+          <div class="section-header">
+            <h2>User Roles Overview</h2>
+            <button class="excel-btn" onclick="exportUserData()">Export Users</button>
+          </div>
+
+          <div class="user-roles-grid">
+            <div class="role-card">
+              <div class="role-icon front-desk">👥</div>
+              <div class="role-info">
+                <h4>Front Desk / OP Staff</h4>
+                <div class="role-count">42 Users</div>
+                <div class="role-description">Patient registration, appointment scheduling, reception</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('front-desk')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon doctor">👨‍⚕️</div>
+              <div class="role-info">
+                <h4>Doctors</h4>
+                <div class="role-count">38 Users</div>
+                <div class="role-description">Patient consultation, diagnosis, treatment planning</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('doctor')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon nurse">👩‍⚕️</div>
+              <div class="role-info">
+                <h4>Nurses</h4>
+                <div class="role-count">67 Users</div>
+                <div class="role-description">Patient care, medication administration, monitoring</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('nurse')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon lab-tech">🔬</div>
+              <div class="role-info">
+                <h4>Lab Technicians</h4>
+                <div class="role-count">24 Users</div>
+                <div class="role-description">Sample collection, testing, result entry</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('lab-tech')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon pharmacist">💊</div>
+              <div class="role-info">
+                <h4>Pharmacists</h4>
+                <div class="role-count">19 Users</div>
+                <div class="role-description">Medication dispensing, inventory management</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('pharmacist')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon billing">💰</div>
+              <div class="role-info">
+                <h4>Billing Staff</h4>
+                <div class="role-count">15 Users</div>
+                <div class="role-description">Invoice generation, payment processing, insurance</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('billing')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon patient">🏥</div>
+              <div class="role-info">
+                <h4>Patients</h4>
+                <div class="role-count">1,247 Users</div>
+                <div class="role-description">Patient portal access, appointments, records</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('patient')">Manage</button>
+            </div>
+
+            <div class="role-card">
+              <div class="role-icon admin">⚙️</div>
+              <div class="role-info">
+                <h4>Hospital Admins</h4>
+                <div class="role-count">8 Users</div>
+                <div class="role-description">Hospital management, staff oversight, reporting</div>
+              </div>
+              <button class="role-btn" onclick="manageRole('admin')">Manage</button>
+            </div>
+          </div>
+
+          <!-- RECENT USER ACTIVITIES -->
+          <div class="section-header">
+            <h2>Recent User Activities</h2>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Hospital</th>
+                  <th>Action</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="userActivitiesBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 40px; color: #6b7280;">
+                    <em>User activity tracking will be available once hospitals start using the system</em>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTIONS MANAGEMENT VIEW -->
+        <div id="subscriptionsView" class="view">
+          <div class="view-header">
+            <h1>Subscriptions Management</h1>
+            <div class="header-actions">
+              <button class="secondary-btn" onclick="bulkRenewal()">Bulk Renewal</button>
+              <button class="excel-btn" onclick="exportSubscriptions()">Export All</button>
+            </div>
+          </div>
+
+          <!-- SUBSCRIPTION STATISTICS -->
+          <div class="stats">
+            <div class="card">
+              <h4>Total Subscriptions</h4>
+              <h3 id="totalSubscriptions">5</h3>
+              <div class="sub-text">All hospitals</div>
+            </div>
+
+            <div class="card">
+              <h4>Active Subscriptions</h4>
+              <h3 id="activeSubscriptions">4</h3>
+              <div class="sub-text">80% Active Rate</div>
+            </div>
+
+            <div class="card">
+              <h4>Monthly Revenue</h4>
+              <h3 id="subscriptionRevenue">₹1,70,000</h3>
+              <div class="sub-text">From subscriptions</div>
+            </div>
+          </div>
+
+          <!-- SUBSCRIPTION PLANS -->
+          <div class="section-header">
+            <h2>Subscription Plans</h2>
+            <button class="primary-btn" onclick="createNewPlan()">+ Create New Plan</button>
+          </div>
+
+          <div id="plansGrid" class="plans-grid">
+            <!-- Plans will be loaded dynamically from API -->
+            <div style="text-align: center; padding: 40px; color: #6b7280; grid-column: 1 / -1;">
+              Loading subscription plans...
+            </div>
+          </div>
+
+          <!-- ACTIVE SUBSCRIPTIONS -->
+          <div class="section-header">
+            <h2>Active Subscriptions</h2>
+          </div>
+
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital</th>
+                  <th>Plan</th>
+                  <th>Start Date</th>
+                  <th>Expiry Date</th>
+                  <th>Monthly Cost</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subscriptionsTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
+                    <em>Subscription data will be displayed here once hospitals are assigned subscription plans</em>
+                  </td>
+                </tr>
+              </tbody>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Create Hospital Modal -->
+    <div class="modal" id="createHospitalModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Add New Hospital</h3>
+          <button class="close-btn" onclick="closeCreateHospital()">&times;</button>
+        </div>
+        
+        <form id="createHospitalForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hospital Name *</label>
+              <input type="text" id="hospitalName" name="name" required />
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Code</label>
+              <input type="text" id="hospitalCode" name="hospital_code" readonly value="HSP-1013" />
+            </div>
+
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="streetAddress" name="address_line1" required />
+            </div>
+
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="city" name="city" required />
+            </div>
+
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="state" name="state" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="phoneNumber" name="phone" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="emailAddress" name="email"   required />
+            </div>
+
+            <div class="form-group">
+              <label>Subscription Plan *</label>
+              <select id="subscriptionPlan" required>
+                <option value="">Select Plan</option>
+                <option value="basic">Basic - ₹5,000/month</option>
+                <option value="standard">Standard - ₹8,000/month</option>
+                <option value="premium">Premium - ₹15,000/month</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Hospital Logo</label>
+              <div class="file-upload">
+                <input type="file" id="hospitalLogo" accept="image/*" onchange="previewLogo()" />
+                <div class="upload-preview" id="logoPreview">
+                  <span>Click to upload logo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="resetHospitalForm()">Reset Form</button>
+            <button type="submit" class="primary-btn">Save Hospital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Hospital Modal -->
+    <div class="modal" id="editHospitalModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Edit Hospital</h3>
+          <button class="close-btn" onclick="closeEditHospital()">&times;</button>
+        </div>
+        
+        <form id="editHospitalForm" onsubmit="submitEditHospitalForm(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hospital Code</label>
+              <input type="text" id="editHospitalCode" readonly style="background: #f3f4f6; cursor: not-allowed;" />
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Name *</label>
+              <input type="text" id="editHospitalName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="editEmailAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="editPhoneNumber" required />
+            </div>
+
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="editStreetAddress" required />
+            </div>
+
+            <div class="form-group">
+              <label>Address Line 2</label>
+              <input type="text" id="editAddressLine2" placeholder="Apartment, suite, etc. (optional)" />
+            </div>
+
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="editCity" required />
+            </div>
+
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="editState" required />
+            </div>
+
+            <div class="form-group">
+              <label>Postal Code</label>
+              <input type="text" id="editPostalCode" placeholder="e.g., 600001" />
+            </div>
+
+            <div class="form-group">
+              <label>Country</label>
+              <input type="text" id="editCountry" value="India" />
+            </div>
+
+            <div class="form-group">
+              <label>Website</label>
+              <input type="url" id="editWebsite" placeholder="https://example.com (optional)" />
+            </div>
+
+            <div class="form-group full-width">
+              <label>Hospital Logo</label>
+              <div class="file-upload">
+                <input type="file" id="editHospitalLogo" accept="image/*" onchange="previewEditLogo()" />
+                <div class="upload-preview" id="editLogoPreview">
+                  <span>Click to upload new logo (optional)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group full-width" style="background: #fef3c7; padding: 12px; border-radius: 8px; border: 1px solid #fbbf24;">
+              <p style="margin: 0; font-size: 14px; color: #92400e;">
+                <strong>Note:</strong> To change hospital status, use the Activate/Deactivate buttons in the hospital list. 
+                To manage subscriptions, use the Subscriptions section.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="closeEditHospital()">Cancel</button>
+            <button type="submit" class="primary-btn">Update Hospital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add New User Modal -->
+    <div class="modal" id="addUserModal">
+      <div class="modal-content large">
+        <div class="modal-header">
+          <h3>Add New User</h3>
+          <button class="close-btn" onclick="closeAddUser()">&times;</button>
+        </div>
+        
+        <form id="addUserForm">
+          <div class="form-grid">
+            <!-- Personal Information -->
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" id="userFirstName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" id="userLastName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="userEmail" required />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="userPhone" required />
+            </div>
+
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="userDOB" />
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="userGender">
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Role and Hospital Assignment -->
+            <div class="form-group">
+              <label>User Role *</label>
+              <select id="userRole" required onchange="updateRoleFields()">
+                <option value="">Select Role</option>
+                <option value="front-desk">Front Desk / OP Staff</option>
+                <option value="doctor">Doctor</option>
+                <option value="nurse">Nurse</option>
+                <option value="lab-tech">Lab Technician</option>
+                <option value="pharmacist">Pharmacist</option>
+                <option value="billing">Billing Staff</option>
+                <option value="admin">Hospital Admin</option>
+                <option value="patient">Patient</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Hospital Assignment *</label>
+              <select id="userHospital" required>
+                <option value="">Select Hospital</option>
+                <!-- Options will be loaded dynamically from database -->
+              </select>
+            </div>
+
+            <!-- Role-specific fields -->
+            <div class="form-group" id="doctorFields" style="display: none;">
+              <label>Specialization</label>
+              <select id="doctorSpecialization">
+                <option value="">Select Specialization</option>
+                <option value="cardiology">Cardiology</option>
+                <option value="dermatology">Dermatology</option>
+                <option value="orthopedics">Orthopedics</option>
+                <option value="gynecology">Gynecology</option>
+                <option value="neurology">Neurology</option>
+                <option value="pediatrics">Pediatrics</option>
+                <option value="ent">ENT</option>
+                <option value="ophthalmology">Ophthalmology</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="doctorLicense" style="display: none;">
+              <label>Medical License Number</label>
+              <input type="text" id="doctorLicenseNumber" />
+            </div>
+
+            <div class="form-group" id="nurseFields" style="display: none;">
+              <label>Nursing License Number</label>
+              <input type="text" id="nurseLicenseNumber" />
+            </div>
+
+            <div class="form-group" id="labFields" style="display: none;">
+              <label>Lab Certification</label>
+              <input type="text" id="labCertification" />
+            </div>
+
+            <!-- Account Credentials -->
+            <div class="form-group">
+              <label>Username *</label>
+              <input type="text" id="userUsername" required />
+            </div>
+
+            <div class="form-group">
+              <label>Temporary Password *</label>
+              <input type="password" id="userPassword" required />
+            </div>
+
+            <!-- Address Information -->
+            <div class="form-group full-width">
+              <label>Address</label>
+              <textarea id="userAddress" rows="3" placeholder="Enter full address"></textarea>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="form-group">
+              <label>Emergency Contact Name</label>
+              <input type="text" id="emergencyContactName" />
+            </div>
+
+            <div class="form-group">
+              <label>Emergency Contact Phone</label>
+              <input type="tel" id="emergencyContactPhone" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" onclick="closeAddUser()">Cancel</button>
+            <button type="submit" class="primary-btn">Create User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+
+
+    <script src="super_admin_dashboard.js?v=1771063400"></script>
+  </body>
+</html>

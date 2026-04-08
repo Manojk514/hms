@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Lab Test - ITiVAT MED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="new_patient.css" />
+  <style>
+    .test-selector-container {
+      position: relative;
+      grid-column: span 12;
+    }
+    
+    .test-search-box {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    
+    .test-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 300px;
+      overflow-y: auto;
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      margin-top: 5px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .test-option {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .test-option:hover {
+      background: #f8fafc;
+    }
+    
+    .test-option.selected {
+      background: #dbeafe;
+    }
+    
+    .test-price {
+      color: #16a34a;
+      font-weight: 600;
+    }
+    
+    .selected-tests-container {
+      margin-top: 16px;
+      display: none;
+      grid-column: span 12;
+    }
+    
+    .selected-test-item {
+      background: #f0f9ff;
+      border: 2px solid #3b82f6;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .test-item-info {
+      flex: 1;
+    }
+    
+    .test-item-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+    
+    .test-item-price {
+      font-size: 14px;
+      color: #64748b;
+    }
+    
+    .remove-test-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .remove-test-btn:hover {
+      background: #dc2626;
+    }
+    
+    .custom-test-section {
+      margin-top: 16px;
+      padding: 15px;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 10px;
+      grid-column: span 12;
+    }
+    
+    .custom-test-inputs {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .add-custom-btn {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .total-summary {
+      margin-top: 20px;
+      padding: 20px;
+      background: #dcfce7;
+      border: 2px solid #16a34a;
+      border-radius: 10px;
+      grid-column: span 12;
+      display: none;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .discount-input-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #16a34a;
+    }
+    
+    .discount-input-row input {
+      width: 120px;
+      padding: 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      -moz-appearance: textfield;
+    }
+    
+    .discount-input-row input::-webkit-outer-spin-button,
+    .discount-input-row input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    .summary-total {
+      font-size: 20px;
+      font-weight: 700;
+      color: #16a34a;
+      padding-top: 10px;
+      border-top: 2px solid #16a34a;
+    }
+    
+    .savings-display {
+      background: #dcfce7;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 10px;
+      color: #15803d;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 🔐 AUTH GUARD -->
+<script type="module">
+  import { protectPage, logout } from "./auth.js";
+  protectPage();
+  window.logout = logout;
+</script>
+
+<!-- 🔥 FIRESTORE SAVE LOGIC -->
+<script type="module">
+  import { db } from "./auth.js";
+  import {
+    collection,
+    addDoc,
+    serverTimestamp,
+    getDocs,
+    query,
+    where
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // 🔍 FETCH PATIENT DETAILS BY OP ID
+  window.fetchPatientDetails = async function() {
+    const opId = document.getElementById("opId").value.trim();
+    
+    if (!opId) {
+      return;
+    }
+
+    try {
+      const q = query(
+        collection(db, "appointments"),
+        where("opNo", "==", opId)
+      );
+
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        alert("No patient found with this OP ID");
+        // Clear fields
+        document.getElementById("patientName").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("age").value = "";
+        document.getElementById("doctor").value = "";
+        document.getElementById("refDoctor").value = "";
+        return;
+      }
+
+      // Get the first matching document
+      const patientData = querySnapshot.docs[0].data();
+      
+      // Populate form fields
+      document.getElementById("patientName").value = patientData.name || "";
+      document.getElementById("phone").value = patientData.phone || "";
+      document.getElementById("age").value = patientData.age || "";
+      document.getElementById("doctor").value = patientData.doctor || "";
+      document.getElementById("refDoctor").value = patientData.refDoctor || "";
+      
+      alert("Patient details loaded successfully! ✅");
+    } catch (err) {
+      console.error("Error fetching patient:", err);
+      alert("Failed to fetch patient details ❌");
+    }
+  };
+
+  // 🔢 Generate unique lab ID
+  async function generateLabId(date) {
+    const d = date.replaceAll("-", "");
+    const q = query(
+      collection(db, "lab_registers"),
+      where("date", "==", date)
+    );
+
+    const snap = await getDocs(q);
+    const count = snap.size + 1;
+
+    return `LAB-${d}-${String(count).padStart(3, "0")}`;
+  }
+
+  window.saveLabTest = async function () {
+    const dateVal = document.getElementById("date").value;
+
+    if (!dateVal) {
+      alert("Select date");
+      return;
+    }
+
+    // Get selected tests
+    const selectedTests = window.getSelectedTests();
+    
+    if (selectedTests.length === 0) {
+      alert("Please select at least one test");
+      return;
+    }
+
+    // Calculate amounts
+    const originalAmount = selectedTests.reduce((sum, test) => sum + test.price, 0);
+    const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+    const discountAmount = (originalAmount * discountPercent) / 100;
+    const finalAmount = window.finalLabAmount || originalAmount.toFixed(2);
+
+    // Generate Lab ID
+    const labId = await generateLabId(dateVal);
+
+    const labRecord = {
+      opNo: labId,
+      opId: document.getElementById("opId").value.trim(),
+      name: document.getElementById("patientName").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      doctor: document.getElementById("doctor").value,
+      refDoctor: document.getElementById("refDoctor").value.trim(),
+      age: document.getElementById("age").value || "",
+      date: dateVal,
+      time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+      tests: selectedTests,
+      originalAmount: originalAmount.toString(),
+      discountPercent: discountPercent,
+      discountAmount: discountAmount.toFixed(2),
+      amount: finalAmount.toString(),
+      payment: "Pending",
+      history: document.getElementById("history").value || "",
+      createdAt: serverTimestamp()
+    };
+
+    // ✅ VALIDATIONS
+    if (!labRecord.opId) return alert("OP ID required");
+    if (!labRecord.name) return alert("Patient name required");
+    if (!/^[0-9]{10}$/.test(labRecord.phone))
+      return alert("Invalid phone number");
+    if (!labRecord.doctor) return alert("Select doctor");
+
+    try {
+      await addDoc(collection(db, "lab_registers"), labRecord);
+      alert(`Lab test saved ✅\n${labId}\nOriginal: ₹${originalAmount}\nDiscount: ${discountPercent}%\nFinal: ₹${finalAmount}`);
+      window.location.href = "op_dashboard.html";
+    } catch (err) {
+      console.error("Firestore error:", err);
+      alert("Failed to save lab test ❌");
+    }
+  };
+</script>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <button class="back-btn" onclick="window.location.href='op_dashboard.html'">
+      ← Back to Dashboard
+    </button>
+  </div>
+
+  <div class="header-center">
+    <img src="itivat_logo.jpg" class="logo-placeholder" />
+    <h1>ITiVAT MED</h1>
+  </div>
+
+  <div class="header-right" style="display: flex; gap: 10px; align-items: center;">
+    <button onclick="location.href='new_lab_reg.html'" style="background: #1e4fa1; color: white; border: none; padding: 12px 20px; font-size: 14px; font-weight: 600; border-radius: 10px; cursor: pointer;">+ New Register</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main-content">
+  <section class="card">
+    <h2>Add Lab Test</h2>
+
+    <div class="form-grid">
+      <div style="grid-column: span 6; position: relative;">
+        <input id="opId" placeholder="OP ID" onblur="fetchPatientDetails()" style="padding-right: 80px;" />
+        <button onclick="fetchPatientDetails(); return false;" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #1e4fa1; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;">Fetch</button>
+      </div>
+      <input id="patientName" placeholder="Patient Name" readonly style="background: #f5f7fa; grid-column: span 6;" />
+    </div>
+
+    <div class="form-grid" style="margin-top: 16px;">
+      <input
+        id="phone"
+        placeholder="Phone"
+        maxlength="10"
+        inputmode="numeric"
+        readonly
+        style="background: #f5f7fa; grid-column: span 6;"
+      />
+      <input id="age" type="number" placeholder="Age" readonly style="background: #f5f7fa; grid-column: span 6;" />
+    </div>
+
+    <div class="form-grid" style="margin-top: 16px;">
+      <!-- TEST SELECTION WITH SEARCH -->
+      <div class="test-selector-container">
+        <input 
+          type="text" 
+          id="testSearch" 
+          class="test-search-box" 
+          placeholder="🔍 Search and select tests..."
+          autocomplete="off"
+          onfocus="showTestDropdown()"
+        />
+        <div id="testDropdown" class="test-dropdown"></div>
+      </div>
+
+      <!-- SELECTED TESTS DISPLAY -->
+      <div id="selectedTestsContainer" class="selected-tests-container"></div>
+
+      <!-- CUSTOM TEST INPUT -->
+      <div class="custom-test-section">
+        <h4 style="margin: 0 0 10px 0; color: #92400e;">Add Custom Test</h4>
+        <div class="custom-test-inputs">
+          <input type="text" id="customTestName" placeholder="Custom Test Name" style="padding: 12px;" />
+          <input type="number" id="customTestPrice" placeholder="Amount" style="padding: 12px;" />
+          <button class="add-custom-btn" onclick="addCustomTest()">+ Add</button>
+        </div>
+      </div>
+
+      <!-- TOTAL SUMMARY -->
+      <div id="totalSummary" class="total-summary">
+        <div class="discount-input-row">
+          <label style="font-size: 16px; font-weight: 600;">Discount (%):</label>
+          <input type="number" id="discountPercent" placeholder="0" min="0" max="100" oninput="calculateTotal()" />
+        </div>
+        
+        <div class="summary-row">
+          <span>Number of Tests:</span>
+          <span id="testCount">0</span>
+        </div>
+        
+        <div class="summary-row">
+          <span>Original Amount:</span>
+          <span id="originalAmount">₹0</span>
+        </div>
+        
+        <div class="savings-display" id="savingsDisplay">
+          <span>You save: </span><span id="savingsAmount">₹0</span>
+        </div>
+        
+        <div class="summary-row summary-total">
+          <span>Final Amount:</span>
+          <span id="totalAmount">₹0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid" style="margin-top: 16px;">
+      <select id="doctor" style="background: #f5f7fa; pointer-events: none;">
+        <option value="">Select Doctor</option>
+        <option>Dr. Mishra</option>
+        <option>Dr. Prathima</option>
+      </select>
+
+      <input id="refDoctor" placeholder="Ref Doctor" readonly style="background: #f5f7fa;" />
+      <input id="date" type="date" placeholder="Bill Date" style="grid-column: span 6;" />
+    </div>
+
+    <textarea id="history" placeholder="Test Description / Notes"></textarea>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="saveLabTest()">Save Lab Test</button>
+      <button class="btn-primary" onclick="printBill('DIA')" style="background:#0ea5e9;">
+        PRINT DIAB NEURO
+      </button>
+      <button class="btn-primary" onclick="printBill('NEURO')" style="background:#7c3aed;">
+        PRINT Jagsan
+      </button>
+      <button class="btn-secondary" onclick="location.href='op_dashboard.html'">
+        Cancel
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- TEST DATA -->
+<script>
+const TEST_DATA = [
+  { name: "PLBS", price: 90 },
+  { name: "FBS", price: 90 },
+  { name: "FT4", price: 290 },
+  { name: "PSA", price: 800 },
+  { name: "TSH, Thyroid Stimulating Hormone", price: 200 },
+  { name: "Vitamin D, 25-Hydroxy", price: 1400 },
+  { name: "Anti Nuclear Antibody (ANA) – Quantitative ELISA", price: 800 },
+  { name: "ANA IFA With Titres", price: 1900 },
+  { name: "ANA Complete Profile", price: 4800 },
+  { name: "Calcium – Serum", price: 350 },
+  { name: "Calcium – Ionized", price: 500 },
+  { name: "Electrolytes (Na, K, Cl) – Serum", price: 600 },
+  { name: "Liver Function Tests (LFT) with GGT", price: 650 },
+  { name: "HBA1C – Glycated Hemoglobin", price: 450 },
+  { name: "Erythrocyte Sedimentation Rate (ESR)", price: 200 },
+  { name: "Lipid Profile", price: 650 },
+  { name: "Uric Acid", price: 250 },
+  { name: "Albumin – Serum", price: 200 },
+  { name: "Vitamin B12", price: 800 },
+  { name: "Rheumatoid Factor (RA) – Quantitative – Serum", price: 650 },
+  { name: "Anti CCP", price: 1650 },
+  { name: "Renal Function Test (RFT)", price: 1500 },
+  { name: "Magnesium – Serum", price: 400 },
+  { name: "Bicarbonate (Carbon Dioxide) – Serum", price: 450 },
+  { name: "Complete Blood Count with Peripheral Smear Review", price: 450 },
+  { name: "HCV (ELISA)", price: 950 },
+  { name: "HBSAG (ELISA)", price: 600 },
+  { name: "HIV (ELISA)", price: 600 },
+  { name: "Reticulocyte Count", price: 500 },
+  { name: "Phosphorous Inorganic", price: 500 },
+  { name: "Thyroid Profile – I", price: 600 },
+  { name: "Folate (Folic Acid)", price: 1900 },
+  { name: "Culture & Sensitivity", price: 1200 },
+  { name: "Iron Studies Profile", price: 1200 },
+  { name: "C-Reactive Protein (CRP) – Quantitative", price: 550 },
+  { name: "Urine Examination – Routine & Microscopy (CUE)", price: 250 },
+  { name: "HLA B-27 Qualitative PCR", price: 3300 },
+  { name: "HLA B-27", price: 2500 },
+  { name: "Microalbumin, Quantitative – Spot urine with Microalbumin/Creatinine Ratio", price: 650 },
+  { name: "Prothrombin Time (PT) and INR", price: 600 },
+  { name: "APTT", price: 600 },
+  { name: "Creatinine", price: 200 },
+  { name: "Fibrinogen (Clotting Method of Clauss)", price: 1100 },
+  { name: "Fibrin Degradation Products (FDP)", price: 1500 },
+  { name: "Copper – Serum", price: 2500 },
+  { name: "Homocysteine", price: 1500 },
+  { name: "Heavy Metal Profile Comprehensive (Blood + Serum)", price: 19000 },
+  { name: "Heavy Metal Profile Comprehensive (Urine)", price: 17500 },
+  { name: "Heavy Metal Profile Screening", price: 12500 }
+];
+
+let selectedTests = [];
+
+function showTestDropdown() {
+  const dropdown = document.getElementById('testDropdown');
+  dropdown.style.display = 'block';
+  renderTestDropdown('');
+}
+
+function renderTestDropdown(searchTerm) {
+  const dropdown = document.getElementById('testDropdown');
+  const filtered = TEST_DATA.filter(test => 
+    test.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  dropdown.innerHTML = filtered.map(test => {
+    const isSelected = selectedTests.some(t => t.name === test.name);
+    return `
+      <div class="test-option ${isSelected ? 'selected' : ''}" onclick="toggleTest('${test.name}', ${test.price})">
+        <span>${test.name}</span>
+        <span class="test-price">₹${test.price}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleTest(testName, testPrice) {
+  const index = selectedTests.findIndex(t => t.name === testName);
+  
+  if (index > -1) {
+    selectedTests.splice(index, 1);
+  } else {
+    selectedTests.push({ name: testName, price: testPrice });
+  }
+  
+  updateSelectedTests();
+  renderTestDropdown(document.getElementById('testSearch').value);
+}
+
+function addCustomTest() {
+  const name = document.getElementById('customTestName').value.trim();
+  const price = parseFloat(document.getElementById('customTestPrice').value);
+  
+  if (!name || !price || price <= 0) {
+    alert('Please enter valid test name and price');
+    return;
+  }
+  
+  selectedTests.push({ name, price, custom: true });
+  updateSelectedTests();
+  
+  document.getElementById('customTestName').value = '';
+  document.getElementById('customTestPrice').value = '';
+}
+
+function removeTest(index) {
+  selectedTests.splice(index, 1);
+  updateSelectedTests();
+  renderTestDropdown(document.getElementById('testSearch').value);
+}
+
+function updateSelectedTests() {
+  const container = document.getElementById('selectedTestsContainer');
+  const summary = document.getElementById('totalSummary');
+  
+  if (selectedTests.length === 0) {
+    container.style.display = 'none';
+    summary.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'block';
+  summary.style.display = 'block';
+  
+  container.innerHTML = selectedTests.map((test, index) => `
+    <div class="selected-test-item">
+      <div class="test-item-info">
+        <div class="test-item-name">${test.name}${test.custom ? ' (Custom)' : ''}</div>
+        <div class="test-item-price">₹${test.price}</div>
+      </div>
+      <button class="remove-test-btn" onclick="removeTest(${index})">Remove</button>
+    </div>
+  `).join('');
+  
+  calculateTotal();
+}
+
+function calculateTotal() {
+  const originalTotal = selectedTests.reduce((sum, test) => sum + test.price, 0);
+  const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+  
+  // Validate discount
+  if (discountPercent < 0) {
+    document.getElementById('discountPercent').value = 0;
+    return;
+  }
+  if (discountPercent > 100) {
+    document.getElementById('discountPercent').value = 100;
+    return;
+  }
+  
+  const discountAmount = (originalTotal * discountPercent) / 100;
+  const finalTotal = originalTotal - discountAmount;
+  
+  document.getElementById('testCount').textContent = selectedTests.length;
+  document.getElementById('originalAmount').textContent = '₹' + originalTotal;
+  document.getElementById('totalAmount').textContent = '₹' + finalTotal.toFixed(2);
+  
+  // Show/hide savings
+  const savingsDisplay = document.getElementById('savingsDisplay');
+  if (discountPercent > 0) {
+    document.getElementById('savingsAmount').textContent = '₹' + discountAmount.toFixed(2) + ' (' + discountPercent + '%)';
+    savingsDisplay.style.display = 'block';
+  } else {
+    savingsDisplay.style.display = 'none';
+  }
+  
+  // Store final amount for Firebase save
+  window.finalLabAmount = finalTotal.toFixed(2);
+  window.discountApplied = discountPercent;
+}
+
+// Export function for Firebase
+window.getSelectedTests = function() {
+  return selectedTests;
+};
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('testSearch');
+  
+  searchInput.addEventListener('input', function(e) {
+    renderTestDropdown(e.target.value);
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('testDropdown');
+    const searchBox = document.getElementById('testSearch');
+    
+    if (!dropdown.contains(e.target) && e.target !== searchBox) {
+      dropdown.style.display = 'none';
+    }
+  });
+});
+</script>
+
+<!-- PRINT BILL SECTION -->
+<div id="printBillSection" style="display: none;">
+  <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+    <!-- Header -->
+    <div style="display: flex; align-items: center; margin-bottom: 15px; position: relative;">
+      <img id="printLogo" style="width: 60px; height: 60px; position: absolute; left: 0;" />
+      <div style="flex: 1; text-align: center;">
+        <h2 id="printClinicName" style="margin: 5px 0; font-size: 20px; font-weight: bold;"></h2>
+        <p id="printAddress1" style="margin: 3px 0; font-size: 11px;"></p>
+        <p id="printAddress2" style="margin: 3px 0; font-size: 11px;"></p>
+        <p id="printContact" style="margin: 3px 0; font-size: 11px;"></p>
+        <h3 style="margin: 10px 0 5px 0; font-size: 14px;">Lab Bill Receipt</h3>
+      </div>
+    </div>
+
+    <!-- Patient Info -->
+    <div style="border: 2px solid #000; padding: 8px; margin-bottom: 10px;">
+      <div style="display: flex; justify-content: space-between;">
+        <div style="flex: 1;">
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Patient Name:</strong> <span id="printPatientName"></span></p>
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Mobile Number:</strong> <span id="printPhone"></span></p>
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Age / Sex:</strong> <span id="printAge"></span></p>
+        </div>
+        <div style="flex: 1; text-align: right;">
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Patient ID:</strong> <span id="printPatientId"></span></p>
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Bill Number:</strong> <span id="printBillNumber"></span></p>
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Bill Date:</strong> <span id="printBillDate"></span></p>
+          <p style="margin: 3px 0; font-size: 12px;"><strong>Refered By:</strong> <span id="printRefDoctor"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Details Table -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; border: 2px solid #000; font-size: 12px;">
+      <thead>
+        <tr style="background: #f0f0f0;">
+          <th style="border: 1px solid #000; padding: 6px; text-align: left;">S.No</th>
+          <th style="border: 1px solid #000; padding: 6px; text-align: left;">Test Name/Profile Name</th>
+          <th style="border: 1px solid #000; padding: 6px; text-align: right;">Charges</th>
+        </tr>
+      </thead>
+      <tbody id="printTestsTable"></tbody>
+    </table>
+
+    <!-- Footer -->
+    <div style="border: 2px solid #000; padding: 8px; margin-bottom: 8px;">
+      <p style="margin: 0; font-size: 12px;"><strong>Received an Amount of:</strong> <span id="printAmountWords"></span></p>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; border: 2px solid #000; padding: 8px; margin-bottom: 10px;">
+      <p style="margin: 0; font-size: 12px;"><strong>Received with thanks</strong></p>
+      <p style="margin: 0; font-size: 12px;"><strong>Signature</strong></p>
+    </div>
+
+    <!-- Test Description -->
+    <div style="padding: 8px; border: 1px solid #ccc;">
+      <p style="margin: 0; font-size: 12px;"><strong>Test Description:</strong></p>
+      <p style="margin: 5px 0; font-size: 11px;" id="printTestDescription"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #printBillSection, #printBillSection * {
+      visibility: visible;
+    }
+    #printBillSection {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      display: block !important;
+    }
+  }
+</style>
+
+<script>
+const PRINT_CONFIG = {
+  DIA: {
+    logo: "diablogo.png",
+    name: "DIAB NEURO CARE CENTER",
+    addr1: " H.No B, 13/F4, near Vidyanagar Bus Stop,",
+    addr2: "Housing Board Colony,Vidya Nagar, Adikmet, Hyderabad, Telangana 500044",
+    contact: "Cell: 7382636888, 8341689666"
+  },
+  NEURO: {
+    logo: "jagsanlogo.png",
+    name: "JAGSAN NEURO CARE CENTER",
+    addr1: "1-1-74/A 1ST FLOOR TAMASI AVENUE, 1st Floor, Kavadi Guda Number 10th St",
+    addr2: "Gandhi Nagar, Kavadiguda, Hyderabad, Telangana 500080",
+    contact: "Cell:+91 7382636888, +91 8341689666"
+  }
+};
+
+function printBill(type) {
+  const cfg = PRINT_CONFIG[type];
+  if (!cfg) {
+    alert("Invalid print type");
+    return;
+  }
+
+  // Set header
+  document.getElementById("printLogo").src = cfg.logo;
+  document.getElementById("printClinicName").textContent = cfg.name;
+  document.getElementById("printAddress1").textContent = cfg.addr1;
+  document.getElementById("printAddress2").textContent = cfg.addr2;
+  document.getElementById("printContact").textContent = cfg.contact;
+
+  // Patient details
+  const patientName = document.getElementById('patientName').value || 'N/A';
+  const phone = document.getElementById('phone').value || 'N/A';
+  const age = document.getElementById('age').value || 'N/A';
+  const date = document.getElementById('date').value || 'N/A';
+  const refDoctor = document.getElementById('refDoctor').value || 'N/A';
+  const testDescription = document.getElementById('history').value || 'N/A';
+
+  const patientId = 'WIN' + Math.floor(Math.random() * 10000);
+  const billNumber = 'OHI' + Math.floor(Math.random() * 100000);
+
+  document.getElementById('printPatientName').textContent = patientName;
+  document.getElementById('printPhone').textContent = phone;
+  document.getElementById('printAge').textContent = age + ' years';
+  document.getElementById('printPatientId').textContent = patientId;
+  document.getElementById('printBillNumber').textContent = billNumber;
+  document.getElementById('printBillDate').textContent = date;
+  document.getElementById('printRefDoctor').textContent = refDoctor;
+  document.getElementById('printTestDescription').textContent = testDescription;
+
+  // Render tests table
+  const testsTable = document.getElementById('printTestsTable');
+  const tests = window.getSelectedTests();
+  
+  let testsHTML = '';
+  let originalTotal = 0;
+  
+  tests.forEach((test, index) => {
+    testsHTML += `
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px;">${index + 1}</td>
+        <td style="border: 1px solid #000; padding: 6px;">${test.name}</td>
+        <td style="border: 1px solid #000; padding: 6px; text-align: right;">₹${test.price}</td>
+      </tr>
+    `;
+    originalTotal += test.price;
+  });
+  
+  // Calculate discount
+  const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+  const discountAmount = (originalTotal * discountPercent) / 100;
+  const finalTotal = originalTotal - discountAmount;
+  
+  // Add totals
+  testsHTML += `
+    <tr>
+      <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>Original Amount</strong></td>
+      <td style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>₹${originalTotal}</strong></td>
+    </tr>
+  `;
+  
+  if (discountPercent > 0) {
+    testsHTML += `
+      <tr>
+        <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>Discount (${discountPercent}%)</strong></td>
+        <td style="border: 1px solid #000; padding: 6px; text-align: right; color: #ef4444;"><strong>- ₹${discountAmount.toFixed(2)}</strong></td>
+      </tr>
+    `;
+  }
+  
+  testsHTML += `
+    <tr style="background: #dcfce7;">
+      <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>Final Amount</strong></td>
+      <td style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>₹${finalTotal.toFixed(2)}</strong></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>Paid Amount</strong></td>
+      <td style="border: 1px solid #000; padding: 6px; text-align: right;"><strong>₹${finalTotal.toFixed(2)}</strong></td>
+    </tr>
+  `;
+  
+  testsTable.innerHTML = testsHTML;
+
+  document.getElementById('printAmountWords').textContent =
+    'Rupees ' + finalTotal.toFixed(2) + ' Only';
+
+  window.print();
+}
+</script>
+</body>
+</html>

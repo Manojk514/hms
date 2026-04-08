@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Finance - ITiVAT MED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- USE SAME DASHBOARD CSS -->
+    <link rel="stylesheet" href="admin_dashboard.css" />
+
+    <style>
+      .finance-filters {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .finance-filters input {
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #cbd5f5;
+      }
+
+      .finance-filters button {
+        background: #1e4fa1;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .chart-box {
+        background: white;
+        padding: 20px;
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+        height: 320px;
+      }
+
+      .chart-box canvas {
+        height: 100% !important;
+      }
+
+      .finance-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-top: 30px;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="top-bar">
+      <button
+        class="back-btn"
+        onclick="window.location.href = 'admin_dashboard.html'"
+      >
+        ← Back
+      </button>
+      <div class="brand"><h2>ITiVAT MED</h2></div>
+    </div>
+
+    <div class="content">
+      <h1 class="dashboard-title">Finance Overview</h1>
+
+      <!-- DATE FILTER -->
+      <div class="finance-filters">
+        <input type="date" id="fromDate" />
+        <input type="date" id="toDate" />
+        <button onclick="loadFinance()">Apply</button>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="stats">
+        <div class="card">
+          <h4>Total Revenue</h4>
+          <h3 id="totalRevenue">₹0</h3>
+        </div>
+
+        <div class="card">
+          <h4>OP Revenue</h4>
+          <h3 id="opRevenue">₹0</h3>
+        </div>
+
+        <div class="card">
+          <h4>Lab Revenue</h4>
+          <h3 id="labRevenue">₹0</h3>
+        </div>
+
+        <div class="card">
+          <h4>Salary Expense</h4>
+          <h3 id="salaryExpense">₹0</h3>
+        </div>
+
+        <div class="card">
+          <h4>Net Profit</h4>
+          <h3 id="netProfit">₹0</h3>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="finance-grid">
+        <div class="chart-box">
+          <h3>Revenue Distribution</h3>
+          <canvas id="pieChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h3>Doctor Revenue</h3>
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="admin_finance.js"></script>
+  </body>
+</html>
